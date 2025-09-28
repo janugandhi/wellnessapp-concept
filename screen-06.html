@@ -712,33 +712,34 @@
 
         function completeOnboarding() {
             // Collect all preference data
-            const preferences = {
-                notifications: {
-                    dailyMoodReminders: document.querySelector('.preference-item:nth-child(1) .toggle-switch').classList.contains('active'),
-                    reminderTime: document.querySelector('.time-picker').value,
-                    assessmentReminders: document.querySelector('.preference-item:nth-child(3) .toggle-switch').classList.contains('active'),
-                    wellnessTips: document.querySelector('.preference-item:nth-child(4) .toggle-switch').classList.contains('active')
-                },
-                language: document.querySelector('.language-dropdown').value,
-                dataSync: {
-                    wifiOnly: document.querySelector('.preference-section:nth-child(3) .preference-item:nth-child(1) .toggle-switch').classList.contains('active'),
-                    backgroundRefresh: document.querySelector('.preference-section:nth-child(3) .preference-item:nth-child(2) .toggle-switch').classList.contains('active')
-                },
-                setupComplete: true,
-                completedAt: new Date().toISOString()
-            };
+            window.location.href = 'screen-07.html';
 
-            console.log('User preferences:', preferences);
+            // const preferences = {
+            //     notifications: {
+            //         dailyMoodReminders: document.querySelector('.preference-item:nth-child(1) .toggle-switch').classList.contains('active'),
+            //         reminderTime: document.querySelector('.time-picker').value,
+            //         assessmentReminders: document.querySelector('.preference-item:nth-child(3) .toggle-switch').classList.contains('active'),
+            //         wellnessTips: document.querySelector('.preference-item:nth-child(4) .toggle-switch').classList.contains('active')
+            //     },
+            //     language: document.querySelector('.language-dropdown').value,
+            //     dataSync: {
+            //         wifiOnly: document.querySelector('.preference-section:nth-child(3) .preference-item:nth-child(1) .toggle-switch').classList.contains('active'),
+            //         backgroundRefresh: document.querySelector('.preference-section:nth-child(3) .preference-item:nth-child(2) .toggle-switch').classList.contains('active')
+            //     },
+            //     setupComplete: true,
+            //     completedAt: new Date().toISOString()
+            // };
 
-            // Show completion animation
-            const progressFill = document.querySelector('.progress-fill');
-            progressFill.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            // console.log('User preferences:', preferences);
 
-            setTimeout(() => {
-                // alert('🎉 Welcome to MindWell!\n\nYour account setup is complete. You\'re ready to start your mental wellness journey.');
-                window.location.href = 'screen-07.html';
-                // In real app: navigate to main dashboard
-            }, 500);
+            // // Show completion animation
+            // const progressFill = document.querySelector('.progress-fill');
+            // progressFill.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+
+            // setTimeout(() => {
+            //     // alert('🎉 Welcome to MindWell!\n\nYour account setup is complete. You\'re ready to start your mental wellness journey.');
+            //     // In real app: navigate to main dashboard
+            // }, 500);
         }
 
         // Auto-configure some preferences for demo
