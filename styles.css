@@ -55,18 +55,25 @@ body {
 }
 
 /* Liquid Glass Background Elements - More vibrant for celebration */
-.glass-orb {
+/* .glass-orb {
     position: fixed;
-    /* Use fixed position relative to the screen, but needs adjustment if screen is scrolling */
+position: absolute;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.2);
+backdrop-filter: blur(40px);
+-webkit-backdrop-filter: blur(40px);
+border: 1px solid rgba(255, 255, 255, 0.3);
+z-index: 1;
+} */
+
+
+.glass-orb {
     position: absolute;
-    /* Keep absolute relative to screen for aesthetics */
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    /* Important: z-index ensures orbs stay behind content */
-    z-index: 1;
 }
 
 
