@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Dashboard</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        /* Animation for crisis alert */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Pulse animation for emergency button */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .action-card.support {
+            animation: pulse 2s infinite;
+        }
+
+        /* Mood tracking success animation */
+        @keyframes moodSuccess {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .mood-submitted {
+            animation: moodSuccess 0.5s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <!-- Liquid Glass Background Elements -->
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>MindWell</span>
+                <span>🔋 85%</span>
+            </div>
+
+            <div class="main-content">
+                <!-- Crisis Alert (hidden by default) -->
+                <div class="crisis-alert" id="crisisAlert">
+                    <div class="crisis-header">
+                        <span>🚨</span>
+                        <div class="crisis-title">Need Support?</div>
+                    </div>
+                    <div class="crisis-description">
+                        We've noticed some concerning patterns. Remember, support is available 24/7.
+                    </div>
+                    <div class="crisis-actions">
+                        <button class="crisis-btn" onclick="getImmediateHelp()">Get Help Now</button>
+                        <button class="crisis-btn secondary" onclick="hideCrisisAlert()">I'm OK</button>
+                    </div>
+                </div>
+
+                <!-- Dashboard Header -->
+                <div class="dashboard-header">
+                    <div class="greeting-section">
+                        <div class="greeting-text">
+                            <div class="greeting-main">Good morning, Alex</div>
+                            <div class="greeting-sub">
+                                Tuesday, September 28
+                                <div class="streak-badge">
+                                    🔥 Week 4 streak
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-avatar" onclick="openProfile()">
+                            A
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wellness Score Card -->
+                <div class="wellness-score-card" onclick="viewDetailedScore()">
+                    <div class="score-header">
+                        <div class="score-info">
+                            <div class="score-title">Your Wellness Score</div>
+                            <div class="score-subtitle">Updated 2 hours ago</div>
+                        </div>
+                        <div class="score-display">
+                            <div class="score-number" id="scoreNumber">74</div>
+                            <div class="score-trend">
+                                <span class="trend-icon">↗️</span>
+                                <span>+6 from last week</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="score-breakdown">
+                        <div class="score-component">
+                            <div class="component-value">78</div>
+                            <div class="component-label">Mood</div>
+                        </div>
+                        <div class="score-component">
+                            <div class="component-value">72</div>
+                            <div class="component-label">Assessments</div>
+                        </div>
+                        <div class="score-component">
+                            <div class="component-value">71</div>
+                            <div class="component-label">Sleep</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Mood Check -->
+                <div class="mood-check-card">
+                    <div class="mood-check-header">
+                        <span>😊</span>
+                        <div class="mood-check-title">How are you feeling right now?</div>
+                    </div>
+                    <div class="mood-slider">
+                        <span class="mood-emoji" data-mood="1" onclick="selectMood(this, 1)">😢</span>
+                        <span class="mood-emoji" data-mood="2" onclick="selectMood(this, 2)">😕</span>
+                        <span class="mood-emoji" data-mood="3" onclick="selectMood(this, 3)">😐</span>
+                        <span class="mood-emoji selected" data-mood="4" onclick="selectMood(this, 4)">🙂</span>
+                        <span class="mood-emoji" data-mood="5" onclick="selectMood(this, 5)">😊</span>
+                    </div>
+                    <button class="mood-submit-btn" onclick="submitMood()">Log Mood</button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <div class="action-card assessment" onclick="startAssessment()">
+                        <span class="action-icon">📋</span>
+                        <div class="action-title">Weekly Check-in</div>
+                        <div class="action-subtitle">PHQ-9 Assessment Due</div>
+                    </div>
+                    <div class="action-card support" onclick="getSupportNow()">
+                        <span class="action-icon">🆘</span>
+                        <div class="action-title">Need Support</div>
+                        <div class="action-subtitle">Get help anytime</div>
+                    </div>
+                    <div class="action-card meditation" onclick="startMeditation()">
+                        <span class="action-icon">🧘‍♀️</span>
+                        <div class="action-title">Meditation</div>
+                        <div class="action-subtitle">5-min breathing</div>
+                    </div>
+                    <div class="action-card community" onclick="joinCommunity()">
+                        <span class="action-icon">👥</span>
+                        <div class="action-title">Community</div>
+                        <div class="action-subtitle">Connect & share</div>
+                    </div>
+                </div>
+
+                <!-- Today's Insights -->
+                <div class="insights-section">
+                    <div class="section-header">
+                        <div class="section-title">Today's Insights</div>
+                        <span class="see-all-btn" onclick="viewAllInsights()">See all</span>
+                    </div>
+                    <div class="insights-container">
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <span class="insight-icon">🌙</span>
+                                <div class="insight-title">Sleep Pattern Notice</div>
+                            </div>
+                            <div class="insight-description">
+                                You've been sleeping 6.2hrs average. Consider aiming for 7-8 hours for better mood
+                                stability.
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <span class="insight-icon">💪</span>
+                                <div class="insight-title">Activity Boost</div>
+                            </div>
+                            <div class="insight-description">
+                                A 15-minute walk could boost your mood by 12% based on your patterns.
+                            </div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-header">
+                                <span class="insight-icon">📈</span>
+                                <div class="insight-title">Progress Highlight</div>
+                            </div>
+                            <div class="insight-description">
+                                Great job! Your consistency this week improved your wellness score by 6 points.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="selectTab('home')">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" onclick="selectTab('progress')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Progress</span>
+                </div>
+                <div class="nav-item" onclick="selectTab('goals')">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-label">Goals</span>
+                </div>
+                <div class="nav-item" onclick="selectTab('community')">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Community</span>
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="nav-item" onclick="selectTab('profile')">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMood = 4;
+        let selectedMood = 4;
+
+        function selectMood(element, mood) {
+            // Remove selected class from all mood emojis
+            document.querySelectorAll('.mood-emoji').forEach(e => e.classList.remove('selected'));
+
+            // Add selected class to clicked emoji
+            element.classList.add('selected');
+            selectedMood = mood;
+        }
+
+        function submitMood() {
+            const moodCard = document.querySelector('.mood-check-card');
+            const button = document.querySelector('.mood-submit-btn');
+
+            // Add success animation
+            moodCard.classList.add('mood-submitted');
+            button.textContent = '✓ Mood Logged';
+            button.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+
+            // Update wellness score based on mood
+            updateWellnessScore(selectedMood);
+
+            // Check if we should show crisis alert
+            if (selectedMood <= 2) {
+                setTimeout(() => {
+                    showCrisisAlert();
+                }, 1000);
+            }
+
+            // Reset after 3 seconds
+            setTimeout(() => {
+                moodCard.classList.remove('mood-submitted');
+                button.textContent = 'Log Mood';
+                button.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            }, 3000);
+
+            console.log('Mood logged:', selectedMood);
+        }
+
+        function updateWellnessScore(mood) {
+            const scoreElement = document.getElementById('scoreNumber');
+            const currentScore = parseInt(scoreElement.textContent);
+            let newScore = currentScore;
+
+            // Adjust score based on mood
+            if (mood >= 4) {
+                newScore = Math.min(100, currentScore + Math.floor(Math.random() * 3) + 1);
+            } else if (mood === 3) {
+                newScore = currentScore; // No change for neutral
+            } else {
+                newScore = Math.max(20, currentScore - Math.floor(Math.random() * 3) - 1);
+            }
+
+            // Animate score change
+            animateScoreChange(currentScore, newScore);
+        }
+
+        function animateScoreChange(from, to) {
+            const scoreElement = document.getElementById('scoreNumber');
+            const diff = to - from;
+            const steps = 20;
+            const increment = diff / steps;
+            let current = from;
+
+            const animate = () => {
+                current += increment;
+                scoreElement.textContent = Math.round(current);
+
+                if ((diff > 0 && current < to) || (diff < 0 && current > to)) {
+                    requestAnimationFrame(animate);
+                } else {
+                    scoreElement.textContent = to;
+                }
+            };
+
+            if (diff !== 0) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        function showCrisisAlert() {
+            const alert = document.getElementById('crisisAlert');
+            alert.classList.add('show');
+        }
+
+        function hideCrisisAlert() {
+            const alert = document.getElementById('crisisAlert');
+            alert.classList.remove('show');
+        }
+
+        function getImmediateHelp() {
+            alert('🆘 Crisis Support Options:\n\n• Emergency: 112\n• Crisis Helpline: +91-9152987821\n• Chat with counselor now\n• Contact your emergency contact\n\nYou are not alone. Help is available.');
+        }
+
+        function startAssessment() {
+            alert('📋 Starting PHQ-9 Assessment...\n\nThis will help us understand how you\'ve been feeling over the past two weeks.');
+        }
+
+        function getSupportNow() {
+            alert('🆘 Support Options:\n\n• Talk to counselor (Available now)\n• Crisis hotline: +91-9152987821\n• Emergency contact: Call trusted person\n• Breathing exercise: 4-7-8 technique\n• Safety plan: View your plan');
+        }
+
+        function startMeditation() {
+            alert('🧘‍♀️ Starting 5-minute breathing meditation...\n\nFind a comfortable position and follow the guided breathing pattern.');
+        }
+
+        function joinCommunity() {
+            alert('👥 Community Features:\n\n• Anonymous support groups\n• Share your progress\n• Read success stories\n• Connect with others\n• Group challenges');
+        }
+
+        function viewDetailedScore() {
+            alert('📊 Detailed Wellness Score:\n\nOverall: 74/100\n• Mood Component: 78/100\n• Assessment Component: 72/100\n• Sleep Component: 71/100\n\nTrend: +6 points this week ↗️');
+        }
+
+        function viewAllInsights() {
+            alert('💡 All Insights:\n\n• Sleep optimization recommendations\n• Activity suggestions\n• Mood pattern analysis\n• Goal progress updates\n• Upcoming reminders');
+        }
+
+        function selectTab(tabName) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+
+</html>
