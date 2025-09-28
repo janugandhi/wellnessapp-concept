@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Privacy & Consent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f2ff 50%, #f0f9ff 100%);
+            border-radius: 42px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Liquid Glass Background Elements */
+        .glass-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-orb-1 {
+            width: 200px;
+            height: 200px;
+            top: -50px;
+            right: -50px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+        }
+
+        .glass-orb-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 100px;
+            left: -30px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+        }
+
+        .glass-orb-3 {
+            width: 100px;
+            height: 100px;
+            top: 200px;
+            left: 50px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(168, 85, 247, 0.1));
+        }
+
+        /* ===== FIX 1: ADJUST MAIN CONTENT CONTAINER ===== */
+        .content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            /* Padding is moved to children to control layout */
+        }
+
+        /* ===== FIX 2: CREATE A NEW SCROLLABLE AREA ===== */
+        .scrollable-area {
+            flex: 1;
+            /* Allows this area to grow and fill available space */
+            overflow-y: auto;
+            /* Enables vertical scrolling ONLY for this area */
+            padding: 0 28px;
+            /* Maintain horizontal spacing */
+        }
+
+        /* Modern scrollbar styling for the new scrollable area */
+        .scrollable-area::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .scrollable-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollable-area::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(226, 232, 240, 0.6);
+            border-radius: 2px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            flex-shrink: 0;
+            padding: 0 28px;
+            /* Add padding here */
+            margin-top: 50px;
+            /* Add top margin */
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 66.67%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            flex-shrink: 0;
+            /* Prevents header from shrinking */
+            padding: 0 28px;
+            /* Add padding here */
+        }
+
+        .step-indicator {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .privacy-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #059669, #10b981);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(5, 150, 105, 0.3), 0 2px 8px rgba(5, 150, 105, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .privacy-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 16px;
+        }
+
+        .shield-icon {
+            font-size: 28px;
+            color: white;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .screen-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .consent-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .consent-item {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .consent-item.required {
+            border-left: 4px solid #ef4444;
+        }
+
+        .consent-item.optional {
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .consent-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12), 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .consent-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .consent-item.checked .checkbox {
+            border-color: #6366f1;
+            background: #6366f1;
+        }
+
+        .consent-item.checked .checkbox::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .consent-title {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            line-height: 1.3;
+        }
+
+        .required-badge,
+        .optional-badge {
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .required-badge {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .optional-badge {
+            background: rgba(139, 92, 246, 0.1);
+            color: #7c3aed;
+        }
+
+        .consent-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+            margin-top: 8px;
+        }
+
+        .policy-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .policy-link {
+            color: #6366f1;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .policy-link:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+
+        .external-icon {
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .data-summary {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            flex-shrink: 0;
+        }
+
+        .summary-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .summary-list {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .summary-list ul {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .summary-list li {
+            margin-bottom: 4px;
+        }
+
+
+        /* ===== FIX 3: ADJUST BOTTOM SECTION TO BE A FIXED FOOTER ===== */
+        .bottom-section {
+            padding: 24px 28px 30px;
+            /* Consolidate padding */
+            flex-shrink: 0;
+            /* Prevent from shrinking */
+            /* Add a gradient to fade scrolling content behind it */
+            background: linear-gradient(to top, #f0f9ff 40%, rgba(240, 249, 255, 0));
+        }
+
+        .continue-button {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3), 0 1px 3px rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .continue-button.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .continue-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .continue-button.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4), 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .continue-button.enabled:hover::before {
+            opacity: 1;
+        }
+
+        .validation-message {
+            text-align: center;
+            font-size: 13px;
+            color: #dc2626;
+            margin-top: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .validation-message.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 430px) {
+            .device-frame {
+                width: 100%;
+                max-width: 390px;
+                height: 100vh;
+                max-height: 844px;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .screen {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="content">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <header class="header">
+                    <div class="step-indicator">Step 4 of 6</div>
+                    <div class="privacy-icon">
+                        <div class="shield-icon">🛡️</div>
+                    </div>
+                    <h1 class="screen-title">Your privacy matters</h1>
+                    <p class="screen-subtitle">We're committed to protecting your personal and health information</p>
+                </header>
+                <main class="scrollable-area">
+                    <div class="consent-container">
+                        <div id="consent-terms" class="consent-item required" onclick="toggleConsent(this)">
+                            <div class="consent-header">
+                                <div class="checkbox"></div>
+                                <div class="consent-title">Terms of Service Agreement <span
+                                        class="required-badge">Required</span></div>
+                            </div>
+                            <div class="consent-description">I agree to MindWell's Terms of Service and understand the
+                                app's features and limitations.</div>
+                            <div class="policy-links"><a href="#" class="policy-link">Read Terms <span
+                                        class="external-icon">↗</span></a></div>
+                        </div>
+
+                        <div id="consent-privacy" class="consent-item required" onclick="toggleConsent(this)">
+                            <div class="consent-header">
+                                <div class="checkbox"></div>
+                                <div class="consent-title">Privacy Policy & Data Processing <span
+                                        class="required-badge">Required</span></div>
+                            </div>
+                            <div class="consent-description">I consent to the collection and processing of my health
+                                data as described in the Privacy Policy.</div>
+                            <div class="policy-links">
+                                <a href="#" class="policy-link">Privacy Policy <span class="external-icon">↗</span></a>
+                                <a href="#" class="policy-link">Data Usage <span class="external-icon">↗</span></a>
+                            </div>
+                        </div>
+
+                        <div id="consent-research" class="consent-item optional" onclick="toggleConsent(this)">
+                            <div class="consent-header">
+                                <div class="checkbox"></div>
+                                <div class="consent-title">Anonymous Research Participation <span
+                                        class="optional-badge">Optional</span></div>
+                            </div>
+                            <div class="consent-description">Help improve mental health research by allowing anonymous
+                                use of my data for scientific studies.</div>
+                        </div>
+
+                        <div id="consent-marketing" class="consent-item optional" onclick="toggleConsent(this)">
+                            <div class="consent-header">
+                                <div class="checkbox"></div>
+                                <div class="consent-title">Marketing Communications <span
+                                        class="optional-badge">Optional</span></div>
+                            </div>
+                            <div class="consent-description">Receive helpful tips, feature updates, and wellness content
+                                via email.</div>
+                        </div>
+                    </div>
+
+                    <div class="data-summary">
+                        <div class="summary-title">📋 Data we collect for your mental health journey:</div>
+                        <div class="summary-list">
+                            <ul>
+                                <li>Assessment responses (PHQ-9, GAD-7, mood logs)</li>
+                                <li>App usage patterns and preferences</li>
+                                <li>Emergency contact information (encrypted)</li>
+                                <li>Progress and wellness trends</li>
+                            </ul>
+                        </div>
+                    </div>
+                </main>
+                <div class="bottom-section">
+                    <button class="continue-button" id="continueBtn" onclick="continueToNext()">
+                        Accept & Continue
+                    </button>
+                    <div class="validation-message" id="validationMsg">
+                        Please accept all required terms to continue
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const requiredCheckboxes = document.querySelectorAll('.consent-item.required');
+        const totalRequired = requiredCheckboxes.length;
+
+        function toggleConsent(element) {
+            element.classList.toggle('checked');
+            updateContinueButton();
+        }
+
+        function updateContinueButton() {
+            const continueBtn = document.getElementById('continueBtn');
+            const validationMsg = document.getElementById('validationMsg');
+            const checkedRequiredCount = document.querySelectorAll('.consent-item.required.checked').length;
+            if (checkedRequiredCount === totalRequired) {
+                continueBtn.classList.add('enabled');
+                validationMsg.classList.remove('show');
+            } else {
+                continueBtn.classList.remove('enabled');
+            }
+        }
+
+        function continueToNext() {
+            const checkedRequiredCount = document.querySelectorAll('.consent-item.required.checked').length;
+            if (checkedRequiredCount !== totalRequired) {
+                document.getElementById('validationMsg').classList.add('show');
+                return;
+            }
+            const consentData = {
+                termsOfService: document.getElementById('consent-terms').classList.contains('checked'),
+                privacyPolicy: document.getElementById('consent-privacy').classList.contains('checked'),
+                researchParticipation: document.getElementById('consent-research').classList.contains('checked'),
+                marketingCommunications: document.getElementById('consent-marketing').classList.contains('checked'),
+                consentTimestamp: new Date().toISOString()
+            };
+            console.log('Consent data:', consentData);
+            // alert('Privacy consents recorded. Proceeding to the next step...');
+            window.location.href = 'screen-05.html';
+
+        }
+        updateContinueButton();
+    </script>
+</body>
+
+</html>

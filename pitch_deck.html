@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Investor Pitch Deck</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            /* Prevent body from scrolling horizontally */
+            overflow-x: hidden;
+        }
+
+        .slide-container {
+            display: none;
+            /* Use 100svh for more reliable viewport height on mobile browsers */
+            min-height: 100svh;
+            padding: 40px;
+            background: white;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .slide-container.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .slide-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-subtitle {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .content-grid {
+            /* Default to two columns on larger screens */
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .content-full {
+            grid-column: 1 / -1;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 1.1em;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .problem-point,
+        .solution-point {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .problem-point {
+            background: #fff5f5;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .solution-point {
+            background: #f0fff4;
+            border-left: 4px solid #38a169;
+        }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .revenue-stream {
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 5px solid #28a745;
+        }
+
+        .revenue-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #1e7e34;
+            margin-bottom: 10px;
+        }
+
+        .revenue-amount {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #28a745;
+            margin-bottom: 8px;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .timeline-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            margin-right: 30px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .timeline-phase {
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .competitive-advantage {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #ffc107;
+        }
+
+        .team-member {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            font-weight: 700;
+        }
+
+        .team-name {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .team-role {
+            color: #6c757d;
+            font-size: 0.95em;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            position: fixed;
+            /* Use a slightly higher value on mobile for better thumb reach */
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+            /* Ensure the controls are always on top */
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-counter {
+            /* FIX: Prevents the counter text from splitting */
+            white-space: nowrap;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #495057;
+            align-self: center;
+            /* Align with the buttons */
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .key-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+        }
+
+        .key-points li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        /* MOBILE OPTIMIZATIONS */
+        @media (max-width: 768px) {
+
+            .slide-container {
+                padding: 20px;
+                margin: 10px;
+                /* Adjust min-height for better use of screen space */
+                min-height: auto;
+            }
+
+            .slide-title {
+                font-size: 2em;
+            }
+
+            /* Collapse two-column layouts into a single column on small screens */
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            /* Make the controls smaller and closer to the bottom */
+            .controls {
+                bottom: 10px;
+                gap: 10px;
+                padding: 5px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+            }
+
+            .slide-counter {
+                padding: 6px 12px;
+            }
+
+            .timeline-item {
+                /* Center marker and content more cleanly on mobile */
+                align-items: flex-start;
+                margin-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide-container active">
+        <div class="slide-header">
+            <h1 class="slide-title">MindWell</h1>
+            <p class="slide-subtitle">AI-Powered Digital Mental Health Platform</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 20px;">Transforming Mental Healthcare Through Technology</h3>
+                <ul class="key-points">
+                    <li>Evidence-based digital therapeutics platform</li>
+                    <li>B2B-focused with corporate wellness programs</li>
+                    <li>AI-powered risk detection and intervention</li>
+                    <li>Clinically validated mental health assessments</li>
+                    <li>Privacy-first architecture with healthcare compliance</li>
+                </ul>
+            </div>
+            <div class="metric-card">
+                <div class="metric-number">₹80Cr</div>
+                <div class="metric-label">Projected Year 3 Revenue</div>
+            </div>
+        </div>
+        <div class="content-grid" style="margin-top: 30px;">
+            <div class="team-member">
+                <div class="team-avatar">CPO</div>
+                <div class="team-name">Clinical Psychologist</div>
+                <div class="team-role">VP Clinical Affairs</div>
+                <p style="color: #6c757d; font-size: 0.9em;">Licensed clinical psychologist, AIIMS background, 12+ years
+                    experience</p>
+            </div>
+            <div class="team-member">
+                <div class="team-avatar">BDV</div>
+                <div class="team-name">Healthcare BD Expert</div>
+                <div class="team-role">VP Business Development</div>
+                <p style="color: #6c757d; font-size: 0.9em;">Former McKinsey, led ₹500Cr+ healthcare partnerships</p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 40px; color: #6c757d;">
+            <p><strong>Series A Funding Round</strong> • Seeking ₹15 Crores</p>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">The Mental Health Crisis</h1>
+            <p class="slide-subtitle">A ₹1.03 Trillion Problem in India</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <div class="problem-point">
+                    <span class="icon">😰</span>
+                    <div>
+                        <strong>200M+ Indians</strong> suffer from mental health issues, with only 0.3 psychiatrists per
+                        100,000 people
+                    </div>
+                </div>
+                <div class="problem-point">
+                    <span class="icon">💼</span>
+                    <div>
+                        <strong>85% of corporate employees</strong> report workplace stress, costing companies ₹1.1L per
+                        employee annually
+                    </div>
+                </div>
+                <div class="problem-point">
+                    <span class="icon">🏥</span>
+                    <div>
+                        <strong>Treatment Gap:</strong> Only 10-12% of people with mental health issues receive adequate
+                        care
+                    </div>
+                </div>
+                <div class="problem-point">
+                    <span class="icon">⏰</span>
+                    <div>
+                        <strong>Late Detection:</strong> Average delay of 6-8 years between symptom onset and treatment
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">₹1.03T</div>
+                    <div class="metric-label">Annual Economic Impact</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">90%</div>
+                    <div class="metric-label">Treatment Gap</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">15%</div>
+                    <div class="metric-label">Annual Productivity Loss</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Our Solution</h1>
+            <p class="slide-subtitle">AI-Powered Digital Mental Health Platform</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <div class="solution-point">
+                    <span class="icon">🔬</span>
+                    <div>
+                        <strong>Clinical Validation:</strong> Integrates PHQ-9, GAD-7, and other validated psychological
+                        assessments
+                    </div>
+                </div>
+                <div class="solution-point">
+                    <span class="icon">🤖</span>
+                    <div>
+                        <strong>AI Risk Detection:</strong> Predicts mental health episodes 7 days in advance with 85%
+                        accuracy
+                    </div>
+                </div>
+                <div class="solution-point">
+                    <span class="icon">🏢</span>
+                    <div>
+                        <strong>B2B Focus:</strong> Corporate wellness programs with measurable ROI for employers
+                    </div>
+                </div>
+                <div class="solution-point">
+                    <span class="icon">🔒</span>
+                    <div>
+                        <strong>Privacy-First:</strong> Zero-knowledge architecture with end-to-end encryption
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div
+                    style="background: linear-gradient(135deg, #e3f2fd, #bbdefb); padding: 30px; border-radius: 15px; text-align: center;">
+                    <h3 style="color: #1565c0; margin-bottom: 20px;">Platform Overview</h3>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Clinical Assessments</strong><br>
+                        <small>Evidence-based screening tools</small>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>AI Intervention Engine</strong><br>
+                        <small>Personalized mental health support</small>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>Corporate Dashboard</strong><br>
+                        <small>Team wellness analytics</small>
+                    </div>
+                    <div>
+                        <strong>Healthcare Integration</strong><br>
+                        <small>Seamless provider connectivity</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Market Opportunity</h1>
+            <p class="slide-subtitle">$4.2B Digital Mental Health Market in India</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Market Size & Growth</h3>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">$4.2B</div>
+                    <div class="metric-label">Total Addressable Market</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">23.8%</div>
+                    <div class="metric-label">Annual Growth Rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">$12.3B</div>
+                    <div class="metric-label">Global Market by 2030</div>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Target Markets</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Corporate Wellness</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">500M+ employees across India's organized sector</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Healthcare Systems</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">70,000+ hospitals and clinics nationwide</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <strong style="color: #495057;">Insurance Industry</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">24 health insurance companies serving 500M+ lives</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Revenue Model</h1>
+            <p class="slide-subtitle">Multiple High-Value Revenue Streams</p>
+        </div>
+        <div class="content-full">
+            <div class="content-grid">
+                <div class="revenue-stream">
+                    <div class="revenue-title">Corporate Wellness Programs</div>
+                    <div class="revenue-amount">₹50K - ₹2L per company/month</div>
+                    <p>Enterprise mental health solutions for 500-50,000 employee companies</p>
+                </div>
+                <div class="revenue-stream">
+                    <div class="revenue-title">Healthcare Integration</div>
+                    <div class="revenue-amount">₹50K - ₹2L per hospital/month</div>
+                    <p>Clinical decision support tools for healthcare providers</p>
+                </div>
+            </div>
+            <div class="content-grid">
+                <div class="revenue-stream">
+                    <div class="revenue-title">Insurance Partnerships</div>
+                    <div class="revenue-amount">2-5% of premium savings</div>
+                    <p>Risk reduction programs with health insurance companies</p>
+                </div>
+                <div class="revenue-stream">
+                    <div class="revenue-title">Consumer Subscriptions</div>
+                    <div class="revenue-amount">₹199 - ₹499/month</div>
+                    <p>Premium features and personalized coaching</p>
+                </div>
+            </div>
+            <div class="content-grid">
+                <div class="revenue-stream">
+                    <div class="revenue-title">Data & Research Licensing</div>
+                    <div class="revenue-amount">₹50L - ₹2Cr annually</div>
+                    <p>Anonymized insights to pharmaceutical and research companies</p>
+                </div>
+                <div class="revenue-stream">
+                    <div class="revenue-title">International Expansion</div>
+                    <div class="revenue-amount">$10M+ potential</div>
+                    <p>Singapore, UAE, Australia market entry by Year 2</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Competitive Advantages</h1>
+            <p class="slide-subtitle">Building Defensible Moats</p>
+        </div>
+        <div class="content-full">
+            <div class="competitive-advantage">
+                <h3 style="color: #856404; margin-bottom: 10px;">🏆 Clinical Validation</h3>
+                <p>Only platform with peer-reviewed efficacy studies and healthcare provider partnerships</p>
+            </div>
+            <div class="competitive-advantage">
+                <h3 style="color: #856404; margin-bottom: 10px;">🔒 Privacy Leadership</h3>
+                <p>Zero-knowledge architecture with SOC 2, ISO 27001, and HIPAA compliance</p>
+            </div>
+            <div class="competitive-advantage">
+                <h3 style="color: #856404; margin-bottom: 10px;">📊 Unique Data Assets</h3>
+                <p>India-specific mental health patterns and cultural adaptation algorithms</p>
+            </div>
+            <div class="competitive-advantage">
+                <h3 style="color: #856404; margin-bottom: 10px;">🤖 Advanced AI</h3>
+                <p>Predictive mental health models with 85% accuracy in risk detection</p>
+            </div>
+            <div class="competitive-advantage">
+                <h3 style="color: #856404; margin-bottom: 10px;">🏥 Healthcare Integration</h3>
+                <p>Deep integration with hospital systems and insurance companies</p>
+            </div>
+            <div class="competitive-advantage">
+                <h3 style="color: #856404; margin-bottom: 10px;">📈 Network Effects</h3>
+                <p>B2B partnerships create compound advantages and customer stickiness</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Technology Platform</h1>
+            <p class="slide-subtitle">AI-Powered Clinical Decision Support</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 20px;">Core Technologies</h3>
+                <ul class="key-points">
+                    <li><strong>Clinical Assessment Engine:</strong> PHQ-9, GAD-7, DASS-21 integration</li>
+                    <li><strong>AI Risk Prediction:</strong> 7-day advance warning system</li>
+                    <li><strong>Intervention Protocols:</strong> Automated crisis response</li>
+                    <li><strong>Privacy Architecture:</strong> On-device processing</li>
+                    <li><strong>Healthcare APIs:</strong> HL7 FHIR compliance</li>
+                    <li><strong>Mobile & Web Apps:</strong> Cross-platform support</li>
+                </ul>
+            </div>
+            <div>
+                <div style="background: linear-gradient(135deg, #f3e5f5, #e1bee7); padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #4a148c; margin-bottom: 20px; text-align: center;">AI Model Performance</h3>
+                    <div class="metric-card" style="margin-bottom: 15px;">
+                        <div class="metric-number">85%</div>
+                        <div class="metric-label">Risk Prediction Accuracy</div>
+                    </div>
+                    <div class="metric-card" style="margin-bottom: 15px;">
+                        <div class="metric-number">92%</div>
+                        <div class="metric-label">Clinical Assessment Correlation</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">78%</div>
+                        <div class="metric-label">Intervention Success Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Go-to-Market Strategy</h1>
+            <p class="slide-subtitle">B2B-First Approach with Healthcare Validation</p>
+        </div>
+        <div class="content-full">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 1: Corporate Pilots (Months 1-6)</div>
+                        <p>Launch with 10 enterprise clients (TCS, Infosys, HDFC) - 5,000 employees total</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 2: Healthcare Integration (Months 6-12)</div>
+                        <p>Partner with 5 hospital chains (Apollo, Fortis) and 2 insurance companies</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 3: Scale & Consumer (Months 12-18)</div>
+                        <p>Expand to 50 corporate clients, 20 hospitals, launch consumer app</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-phase">Phase 4: International (Months 18-24)</div>
+                        <p>Singapore, UAE, Australia market entry with proven ROI metrics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Financial Projections</h1>
+            <p class="slide-subtitle">Path to ₹80 Crores Annual Revenue</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">3-Year Revenue Forecast</h3>
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #1e7e34;">Year 1: ₹2-5 Crores</strong>
+                    <p style="color: #155724; margin-top: 5px;">10 corporate pilots + 5 hospital partnerships</p>
+                </div>
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #0d47a1;">Year 2: ₹15-25 Crores</strong>
+                    <p style="color: #1565c0; margin-top: 5px;">50 companies + 20 hospitals + consumer launch</p>
+                </div>
+                <div style="background: #fff3e0; padding: 20px; border-radius: 10px;">
+                    <strong style="color: #e65100;">Year 3: ₹50-80 Crores</strong>
+                    <p style="color: #f57c00; margin-top: 5px;">200 companies + international expansion</p>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Key Metrics</h3>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">₹200K</div>
+                    <div class="metric-label">Enterprise Customer LTV</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">₹10K</div>
+                    <div class="metric-label">Enterprise CAC</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">20:1</div>
+                    <div class="metric-label">LTV:CAC Ratio</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">18 mos</div>
+                    <div class="metric-label">Payback Period</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Leadership Team</h1>
+            <p class="slide-subtitle">Healthcare Technology & Clinical Expertise</p>
+        </div>
+        <div class="content-grid">
+            <div class="team-member">
+                <div class="team-avatar">CEO</div>
+                <div class="team-name">Healthcare Executive</div>
+                <div class="team-role">CEO & Co-Founder</div>
+                <p style="color: #6c757d; font-size: 0.9em;">15+ years in healthcare technology, former VP at healthcare
+                    unicorn</p>
+            </div>
+            <div class="team-member">
+                <div class="team-avatar">CTO</div>
+                <div class="team-name">AI/ML Expert</div>
+                <div class="team-role">CTO & Co-Founder</div>
+                <p style="color: #6c757d; font-size: 0.9em;">PhD in Healthcare AI, former Google Health, published 40+
+                    papers</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Funding Requirements</h1>
+            <p class="slide-subtitle">Series A: ₹15 Crores for 18-Month Growth</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Use of Funds</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Team Expansion (33%)</strong> - ₹5 Crores
+                    <p style="color: #6c757d; margin-top: 5px;">Hire 25 engineers, clinicians, and sales professionals
+                    </p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Product Development (20%)</strong> - ₹3 Crores
+                    <p style="color: #6c757d; margin-top: 5px;">AI model development, platform scaling, mobile apps</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Clinical Validation (13%)</strong> - ₹2 Crores
+                    <p style="color: #6c757d; margin-top: 5px;">Peer-reviewed studies, regulatory compliance</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Sales & Marketing (20%)</strong> - ₹3 Crores
+                    <p style="color: #6c757d; margin-top: 5px;">Enterprise sales team, marketing campaigns</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <strong style="color: #495057;">Operations & Infrastructure (14%)</strong> - ₹2 Crores
+                    <p style="color: #6c757d; margin-top: 5px;">Cloud infrastructure, security, compliance</p>
+                </div>
+            </div>
+            <div>
+                <div
+                    style="background: linear-gradient(135deg, #e8f5e8, #f0f8f0); padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
+                    <h3 style="color: #1e7e34; margin-bottom: 20px;">Investment Highlights</h3>
+                    <div class="metric-card" style="margin-bottom: 15px;">
+                        <div class="metric-number">4x</div>
+                        <div class="metric-label">Expected Revenue Multiple</div>
+                    </div>
+                    <div class="metric-card" style="margin-bottom: 15px;">
+                        <div class="metric-number">18 mo</div>
+                        <div class="metric-label">Runway to Profitability</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-number">₹300Cr</div>
+                        <div class="metric-label">Series B Valuation Target</div>
+                    </div>
+                </div>
+                <div style="background: #fff3cd; padding: 25px; border-radius: 15px; border: 2px solid #ffc107;">
+                    <h4 style="color: #856404; margin-bottom: 15px;">Previous Funding</h4>
+                    <p style="color: #856404; margin-bottom: 10px;"><strong>Seed Round:</strong> ₹2 Crores</p>
+                    <p style="color: #856404; margin-bottom: 10px;"><strong>Investors:</strong> Healthcare angels, IIT
+                        alumni network</p>
+                    <p style="color: #856404;"><strong>Current Valuation:</strong> ₹20 Crores pre-money</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Market Validation</h1>
+            <p class="slide-subtitle">Strong Early Traction & Customer Interest</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Pilot Program Results</h3>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">78%</div>
+                    <div class="metric-label">Employee Engagement Rate</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">23%</div>
+                    <div class="metric-label">Reduction in Stress-Related Absences</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">45%</div>
+                    <div class="metric-label">Improvement in Mood Scores</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">9.2/10</div>
+                    <div class="metric-label">Net Promoter Score</div>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Customer Pipeline</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Letters of Intent</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">15 enterprise customers, ₹8Cr total contract value</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Pilot Programs</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">3 active pilots with Fortune 500 companies</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #495057;">Healthcare Partnerships</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">MOUs signed with 2 major hospital chains</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <strong style="color: #495057;">Research Collaborations</strong>
+                    <p style="color: #6c757d; margin-top: 5px;">AIIMS Delhi, NIMHANS partnerships confirmed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Risk Analysis & Mitigation</h1>
+            <p class="slide-subtitle">Comprehensive Risk Management Strategy</p>
+        </div>
+        <div class="content-full">
+            <div class="content-grid">
+                <div style="background: #fff5f5; padding: 25px; border-radius: 12px; border-left: 5px solid #e53e3e;">
+                    <h4 style="color: #c53030; margin-bottom: 15px;">🔐 Regulatory Risk</h4>
+                    <p style="color: #742a2a; margin-bottom: 10px;"><strong>Risk:</strong> Changing healthcare
+                        regulations</p>
+                    <p style="color: #742a2a;"><strong>Mitigation:</strong> Proactive compliance, regulatory advisory
+                        board, legal expertise</p>
+                </div>
+                <div style="background: #f0fff4; padding: 25px; border-radius: 12px; border-left: 5px solid #38a169;">
+                    <h4 style="color: #2f855a; margin-bottom: 15px;">🏥 Clinical Risk</h4>
+                    <p style="color: #276749; margin-bottom: 10px;"><strong>Risk:</strong> Clinical efficacy questions
+                    </p>
+                    <p style="color: #276749;"><strong>Mitigation:</strong> Peer-reviewed studies, clinical advisory
+                        board, continuous monitoring</p>
+                </div>
+            </div>
+            <div class="content-grid" style="margin-top: 20px;">
+                <div style="background: #fffbf0; padding: 25px; border-radius: 12px; border-left: 5px solid #d69e2e;">
+                    <h4 style="color: #b7791f; margin-bottom: 15px;">⚡ Technical Risk</h4>
+                    <p style="color: #744210; margin-bottom: 10px;"><strong>Risk:</strong> AI model bias, scalability
+                        issues</p>
+                    <p style="color: #744210;"><strong>Mitigation:</strong> Diverse training data, cloud-native
+                        architecture, regular audits</p>
+                </div>
+                <div style="background: #f7fafc; padding: 25px; border-radius: 12px; border-left: 5px solid #4299e1;">
+                    <h4 style="color: #3182ce; margin-bottom: 15px;">🏢 Market Risk</h4>
+                    <p style="color: #2c5aa0; margin-bottom: 10px;"><strong>Risk:</strong> Enterprise adoption slower
+                        than expected</p>
+                    <p style="color: #2c5aa0;"><strong>Mitigation:</strong> Multiple revenue streams, proven ROI
+                        metrics, flexible pricing</p>
+                </div>
+            </div>
+            <div class="content-grid" style="margin-top: 20px;">
+                <div style="background: #faf5ff; padding: 25px; border-radius: 12px; border-left: 5px solid #805ad5;">
+                    <h4 style="color: #6b46c1; margin-bottom: 15px;">🔒 Privacy Risk</h4>
+                    <p style="color: #553c9a; margin-bottom: 10px;"><strong>Risk:</strong> Data breach or privacy
+                        violation</p>
+                    <p style="color: #553c9a;"><strong>Mitigation:</strong> Zero-knowledge architecture, end-to-end
+                        encryption, regular audits</p>
+                </div>
+                <div style="background: #f0f4f8; padding: 25px; border-radius: 12px; border-left: 5px solid #718096;">
+                    <h4 style="color: #4a5568; margin-bottom: 15px;">💰 Financial Risk</h4>
+                    <p style="color: #2d3748; margin-bottom: 10px;"><strong>Risk:</strong> Higher customer acquisition
+                        costs</p>
+                    <p style="color: #2d3748;"><strong>Mitigation:</strong> Partnership-driven growth, proven unit
+                        economics, diverse funding sources</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Exit Strategy</h1>
+            <p class="slide-subtitle">Multiple High-Value Exit Opportunities</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Strategic Acquirers</h3>
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #0d47a1;">Healthcare Technology</strong>
+                    <p style="color: #1565c0; margin-top: 5px;">Teladoc, Amwell, Veracyte (10-15x revenue multiples)</p>
+                </div>
+                <div style="background: #f3e5f5; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #4a148c;">Big Tech</strong>
+                    <p style="color: #6a1b9a; margin-top: 5px;">Google Health, Microsoft Healthcare, Amazon Health</p>
+                </div>
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin-bottom: 15px;">
+                    <strong style="color: #1e7e34;">Insurance Giants</strong>
+                    <p style="color: #155724; margin-top: 5px;">UnitedHealth, Anthem, Aetna (seeking digital health
+                        assets)</p>
+                </div>
+                <div style="background: #fff3e0; padding: 20px; border-radius: 10px;">
+                    <strong style="color: #e65100;">Healthcare Providers</strong>
+                    <p style="color: #f57c00; margin-top: 5px;">Apollo, Fortis, HCA Healthcare (vertical integration)
+                    </p>
+                </div>
+            </div>
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Exit Timeline & Valuation</h3>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">5-7 yrs</div>
+                    <div class="metric-label">Expected Exit Timeline</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">₹2000Cr</div>
+                    <div class="metric-label">Target Exit Valuation</div>
+                </div>
+                <div class="metric-card" style="margin-bottom: 20px;">
+                    <div class="metric-number">8-12x</div>
+                    <div class="metric-label">Revenue Multiple</div>
+                </div>
+                <div
+                    style="background: #fff3cd; padding: 25px; border-radius: 15px; border: 2px solid #ffc107; margin-top: 20px;">
+                    <h4 style="color: #856404; margin-bottom: 15px;">IPO Alternative</h4>
+                    <p style="color: #856404; margin-bottom: 10px;"><strong>Revenue Target:</strong> ₹500Cr ARR</p>
+                    <p style="color: #856404; margin-bottom: 10px;"><strong>Market Cap:</strong> ₹5000-8000Cr</p>
+                    <p style="color: #856404;"><strong>Comparable:</strong> Veeva Systems, Veracyte</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container">
+        <div class="slide-header">
+            <h1 class="slide-title">Join Us in Transforming Mental Healthcare</h1>
+            <p class="slide-subtitle">Series A Investment Opportunity</p>
+        </div>
+        <div class="content-grid">
+            <div>
+                <h3 style="color: #495057; margin-bottom: 25px;">Why Invest Now?</h3>
+                <ul class="key-points">
+                    <li><strong>Massive Market:</strong> ₹1.03T problem with minimal solutions</li>
+                    <li><strong>Proven Traction:</strong> Enterprise customers ready to pay</li>
+                    <li><strong>Clinical Validation:</strong> Evidence-based approach</li>
+                    <li><strong>Experienced Team:</strong> Healthcare and AI expertise</li>
+                    <li><strong>Defensible Moats:</strong> Regulatory barriers, network effects</li>
+                    <li><strong>Clear Path to Scale:</strong> B2B model with high LTV</li>
+                </ul>
+            </div>
+            <div style="text-align: center;">
+                <div
+                    style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 40px; border-radius: 20px; margin-bottom: 30px;">
+                    <h2 style="margin-bottom: 20px;">Investment Terms</h2>
+                    <div style="font-size: 1.5em; font-weight: 700; margin-bottom: 10px;">₹15 Crores</div>
+                    <div style="margin-bottom: 20px;">Series A Round</div>
+                    <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 10px;">₹60 Crores</div>
+                    <div style="opacity: 0.9;">Post-money Valuation</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 25px; border-radius: 15px;">
+                    <h3 style="color: #495057; margin-bottom: 20px;">Contact Information</h3>
+                    <p style="color: #6c757d; margin-bottom: 10px;"><strong>Email:</strong> investors@mindwell.health
+                    </p>
+                    <p style="color: #6c757d; margin-bottom: 10px;"><strong>Website:</strong> www.mindwell.health</p>
+                    <p style="color: #6c757d;"><strong>Demo:</strong> Schedule a pilot program</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">Previous</button>
+        <span class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">15</span>
+        </span>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next</button>
+    </div>
+
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide-container');
+        const totalSlides = slides.length;
+
+        // Ensure total slides count is updated
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+
+            // FIX: Scroll to the top of the page when the slide changes
+            window.scrollTo(0, 0);
+        }
+
+        function changeSlide(direction) {
+            const newIndex = currentSlideIndex + direction;
+            if (newIndex >= 0 && newIndex < totalSlides) {
+                currentSlideIndex = newIndex;
+                showSlide(currentSlideIndex);
+            }
+        }
+
+        // Keyboard navigation (optional for mobile, but good for desktop)
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Mental Health Context</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f2ff 50%, #f0f9ff 100%);
+            border-radius: 42px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Liquid Glass Background Elements */
+        .glass-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-orb-1 {
+            width: 180px;
+            height: 180px;
+            top: -40px;
+            right: -60px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+        }
+
+        .glass-orb-2 {
+            width: 120px;
+            height: 120px;
+            bottom: 150px;
+            left: -40px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(99, 102, 241, 0.1));
+        }
+
+        .glass-orb-3 {
+            width: 90px;
+            height: 90px;
+            top: 300px;
+            right: -20px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(168, 85, 247, 0.08));
+        }
+
+        /* ===== FIX 1: ADJUST MAIN CONTENT CONTAINER ===== */
+        .content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* ===== FIX 2: CREATE A NEW SCROLLABLE AREA ===== */
+        .scrollable-area {
+            flex: 1;
+            /* Allows this area to grow and fill available space */
+            overflow-y: auto;
+            /* Enables vertical scrolling ONLY for this area */
+            padding: 0 28px;
+            /* Maintain horizontal spacing */
+        }
+
+        /* Modern scrollbar styling for the new scrollable area */
+        .scrollable-area::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .scrollable-area::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollable-area::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(226, 232, 240, 0.6);
+            border-radius: 2px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            flex-shrink: 0;
+            padding: 0 28px;
+            margin-top: 50px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 83.33%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+
+        .header {
+            margin-bottom: 32px;
+            flex-shrink: 0;
+            padding: 0 28px;
+        }
+
+        .step-indicator {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .screen-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        .icon-experience {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+        }
+
+        .icon-treatment {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .icon-purpose {
+            background: linear-gradient(135deg, #8b5cf6, #a855f7);
+        }
+
+        .icon-comfort {
+            background: linear-gradient(135deg, #f59e0b, #f97316);
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .radio-option.selected {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: #6366f1;
+        }
+
+        .radio-button {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+        }
+
+        .radio-option.selected .radio-button {
+            border-color: #6366f1;
+            background: #6366f1;
+        }
+
+        .radio-option.selected .radio-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .checkbox-group {
+
+            display: flex;
+            flex-direction: column;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .checkbox-option.selected {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: #8b5cf6;
+        }
+
+        .checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .checkbox-option.selected .checkbox {
+            border-color: #8b5cf6;
+            background: #8b5cf6;
+        }
+
+        .checkbox-option.selected .checkbox::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+        }
+
+        .scale-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .scale-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* ===== FIX 3: FIX HORIZONTAL OVERFLOW IN ASSESSMENT SECTION ===== */
+        .scale-options {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            overflow-x: auto;
+            /* Allow horizontal scrolling for the numbers */
+            padding-bottom: 8px;
+            /* Add space for the scrollbar */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .scale-options::-webkit-scrollbar {
+            display: none;
+            /* Hide scrollbar for Chrome, Safari, and Opera */
+        }
+
+        .scale-option {
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+            /* Prevent numbers from shrinking */
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .scale-option.selected {
+            border-color: #f59e0b;
+            background: #f59e0b;
+            color: white;
+        }
+
+        .skip-section {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .skip-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .skip-button {
+            background: transparent;
+            border: none;
+            color: #6366f1;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ===== FIX 4: ADJUST BOTTOM SECTION TO BE A FIXED FOOTER ===== */
+        .bottom-section {
+            padding: 24px 28px 30px;
+            flex-shrink: 0;
+            background: linear-gradient(to top, #f0f9ff 40%, rgba(240, 249, 255, 0));
+        }
+
+        .continue-button {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3), 0 1px 3px rgba(99, 102, 241, 0.2);
+        }
+
+        @media (max-width: 430px) {
+            .device-frame {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .screen {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="content">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <header class="header">
+                    <div class="step-indicator">Step 5 of 6</div>
+                    <h1 class="screen-title">Help us personalize your experience</h1>
+                    <p class="screen-subtitle">These details help us provide better recommendations tailored to your
+                        needs</p>
+                </header>
+                <main class="scrollable-area">
+                    <div class="questions-container">
+                        <div class="question-card">
+                            <div class="question-title">
+                                <div class="question-icon icon-experience">📱</div> Have you used mental health apps
+                                before?
+                            </div>
+                            <div class="option-group">
+                                <div class="radio-option" onclick="selectRadio(this, 'experience')">
+                                    <div class="radio-button"></div><span class="radio-label">Yes, I'm familiar with
+                                        them</span>
+                                </div>
+                                <div class="radio-option" onclick="selectRadio(this, 'experience')">
+                                    <div class="radio-button"></div><span class="radio-label">No, this is my first
+                                        time</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-title">
+                                <div class="question-icon icon-treatment">🏥</div> Are you currently receiving mental
+                                health treatment?
+                            </div>
+                            <div class="option-group">
+                                <div class="radio-option" onclick="selectRadio(this, 'treatment')">
+                                    <div class="radio-button"></div><span class="radio-label">Yes, with a
+                                        therapist/counselor</span>
+                                </div>
+                                <div class="radio-option" onclick="selectRadio(this, 'treatment')">
+                                    <div class="radio-button"></div><span class="radio-label">Yes, with
+                                        medication</span>
+                                </div>
+                                <div class="radio-option" onclick="selectRadio(this, 'treatment')">
+                                    <div class="radio-button"></div><span class="radio-label">No, not currently</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-title">
+                                <div class="question-icon icon-purpose">🎯</div> What brings you to MindWell? (Select
+                                all that apply)
+                            </div>
+                            <div class="checkbox-group">
+                                <div class="checkbox-option" onclick="toggleCheckbox(this)">
+                                    <div class="checkbox"></div><span>General wellness</span>
+                                </div>
+                                <div class="checkbox-option" onclick="toggleCheckbox(this)">
+                                    <div class="checkbox"></div><span>Work stress</span>
+                                </div>
+                                <div class="checkbox-option" onclick="toggleCheckbox(this)">
+                                    <div class="checkbox"></div><span>Anxiety support</span>
+                                </div>
+                                <div class="checkbox-option" onclick="toggleCheckbox(this)">
+                                    <div class="checkbox"></div><span>Mood tracking</span>
+                                </div>
+                                <div class="checkbox-option" onclick="toggleCheckbox(this)">
+                                    <div class="checkbox"></div><span>Sleep issues</span>
+                                </div>
+                                <div class="checkbox-option" onclick="toggleCheckbox(this)">
+                                    <div class="checkbox"></div><span>Depression support</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-title">
+                                <div class="question-icon icon-comfort">💭</div> How comfortable are you with mental
+                                health assessments?
+                            </div>
+                            <div class="scale-container">
+                                <!-- <span class="scale-label">Not at all</span> -->
+                                <div class="scale-options">
+                                    <div class="scale-option" onclick="selectScale(this)">1</div>
+                                    <div class="scale-option" onclick="selectScale(this)">2</div>
+                                    <div class="scale-option" onclick="selectScale(this)">3</div>
+                                    <div class="scale-option" onclick="selectScale(this)">4</div>
+                                    <div class="scale-option" onclick="selectScale(this)">5</div>
+                                </div>
+                                <!-- <span class="scale-label">Very</span> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skip-section">
+                        <div class="skip-text">All questions are optional and can be updated later</div>
+                        <button class="skip-button" onclick="skipScreen()">I'll answer these later</button>
+                    </div>
+                </main>
+                <div class="bottom-section">
+                    <button class="continue-button" onclick="continueToNext()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectRadio(element, groupName) {
+            const groupElements = element.parentElement.querySelectorAll('.radio-option');
+            groupElements.forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+        function toggleCheckbox(element) { element.classList.toggle('selected'); }
+        function selectScale(element) {
+            const scaleElements = element.parentElement.querySelectorAll('.scale-option');
+            scaleElements.forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+        function skipScreen() { alert('Skipping to next step...'); }
+        function continueToNext() {
+            const selectedValues = {
+                experience: document.querySelector('[onclick*="experience"].selected')?.textContent?.trim(),
+                treatment: document.querySelector('[onclick*="treatment"].selected')?.textContent?.trim(),
+                purposes: Array.from(document.querySelectorAll('.checkbox-option.selected')).map(el => el.textContent.trim()),
+                comfortLevel: document.querySelector('.scale-option.selected')?.textContent?.trim()
+            };
+            console.log('Selected values:', selectedValues);
+            // alert('Proceeding to preferences setup...');
+            window.location.href = 'screen-06.html';
+
+        }
+    </script>
+</body>
+
+</html>
