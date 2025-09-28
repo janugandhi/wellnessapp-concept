@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Welcome to Your Journey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            /* Allow body scrolling if the device frame is too large for the viewport */
+            overflow: auto;
+        }
+
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f2ff 50%, #f0f9ff 100%);
+            border-radius: 42px;
+            /* FIX: Allow content to scroll vertically */
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Liquid Glass Background Elements - More vibrant for celebration */
+        .glass-orb {
+            position: fixed;
+            /* Use fixed position relative to the screen, but needs adjustment if screen is scrolling */
+            position: absolute;
+            /* Keep absolute relative to screen for aesthetics */
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            /* Important: z-index ensures orbs stay behind content */
+            z-index: 1;
+        }
+
+        .glass-orb-1 {
+            width: 200px;
+            height: 200px;
+            top: -50px;
+            right: -60px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(16, 185, 129, 0.15));
+        }
+
+        .glass-orb-2 {
+            width: 150px;
+            height: 150px;
+            bottom: 150px;
+            left: -40px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.12));
+        }
+
+        .glass-orb-3 {
+            width: 120px;
+            height: 120px;
+            top: 250px;
+            right: -30px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(147, 51, 234, 0.1));
+        }
+
+        .glass-orb-4 {
+            width: 80px;
+            height: 80px;
+            top: 150px;
+            left: 30px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.12));
+        }
+
+        .content {
+            padding: 50px 28px 30px;
+            /* FIX: Remove fixed height and use min-height for flex */
+            height: auto;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            /* Bring content above the orbs */
+            z-index: 5;
+            /* Added padding bottom for better scrolling experience */
+            padding-bottom: 50px;
+        }
+
+        .celebration-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 12px 40px rgba(16, 185, 129, 0.4),
+                0 4px 12px rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: successPulse 2s ease-in-out infinite;
+        }
+
+        .success-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            border-radius: 20px;
+        }
+
+        .checkmark {
+            font-size: 36px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #64748b;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .journey-summary {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sparkle-icon {
+            font-size: 20px;
+        }
+
+        .journey-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #6366f1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .wellness-preview {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.08));
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .preview-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4338ca;
+        }
+
+        .baseline-score {
+            font-size: 32px;
+            font-weight: 800;
+            color: #6366f1;
+        }
+
+        .score-label {
+            font-size: 13px;
+            color: #6366f1;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .next-steps {
+            /* flex: 1; removed to allow natural height growth in the scrollable container */
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .next-step-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.08),
+                0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .next-step-card:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.12),
+                0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .icon-mood {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .icon-assessment {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .icon-insights {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+
+        .step-cta {
+            font-size: 13px;
+            color: #6366f1;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .bottom-section {
+            margin-top: auto;
+        }
+
+        .encouragement-message {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.08));
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .encouragement-text {
+            font-size: 15px;
+            color: #059669;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .start-journey-button {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow:
+                0 8px 32px rgba(99, 102, 241, 0.4),
+                0 2px 8px rgba(99, 102, 241, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-journey-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .start-journey-button:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 12px 40px rgba(99, 102, 241, 0.5),
+                0 6px 16px rgba(99, 102, 241, 0.4);
+        }
+
+        .start-journey-button:hover::before {
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 430px) {
+            .device-frame {
+                width: 100%;
+                max-width: 390px;
+                height: 100vh;
+                max-height: 844px;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .screen {
+                border-radius: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .device-frame {
+                width: 430px;
+                height: 932px;
+            }
+
+            .content {
+                padding: 60px 32px 40px;
+            }
+
+            .welcome-title {
+                font-size: 36px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes successPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 12px 40px rgba(16, 185, 129, 0.4), 0 4px 12px rgba(16, 185, 129, 0.3);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 16px 50px rgba(16, 185, 129, 0.5), 0 6px 16px rgba(16, 185, 129, 0.4);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+        }
+
+        @keyframes celebration {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1) rotate(180deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        .content>* {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        /* 
+        .celebration-header {
+            animation: celebration 1s ease-out forwards;
+            animation-delay: 0.2s;
+        } */
+
+        .journey-summary {
+            animation-delay: 0.4s;
+        }
+
+        .next-steps {
+            animation-delay: 0.6s;
+        }
+
+        .bottom-section {
+            animation-delay: 0.8s;
+        }
+
+        .next-step-card:nth-child(1) {
+            animation-delay: 0.6s;
+        }
+
+        .next-step-card:nth-child(2) {
+            animation-delay: 0.7s;
+        }
+
+        .next-step-card:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        /* Enhanced floating animation for celebration */
+        .glass-orb-1 {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .glass-orb-2 {
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        .glass-orb-3 {
+            animation: float 7s ease-in-out infinite;
+        }
+
+        .glass-orb-4 {
+            animation: float 5s ease-in-out infinite reverse;
+        }
+
+        /* Confetti-like particles */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            animation: confetti 3s ease-out infinite;
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0vh) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <!-- Liquid Glass Background Elements -->
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+            <div class="glass-orb glass-orb-4"></div>
+
+            <div class="content">
+                <div class="celebration-header">
+                    <div class="success-icon">
+                        <div class="checkmark">✓</div>
+                    </div>
+                    <h1 class="welcome-title">Welcome to MindWell!</h1>
+                    <p class="welcome-subtitle">Your mental wellness journey starts now</p>
+                </div>
+
+                <div class="journey-summary">
+                    <div class="summary-title">
+                        <span class="sparkle-icon">✨</span>
+                        Your Setup is Complete
+                    </div>
+                    <div class="journey-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">8</div>
+                            <div class="stat-label">Steps Completed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Profile Ready</div>
+                        </div>
+                    </div>
+                    <div class="wellness-preview">
+                        <div class="preview-header">
+                            <div class="preview-title">Your Baseline Wellness Score</div>
+                            <div>
+                                <div class="baseline-score">72</div>
+                                <div class="score-label">Good Start</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <div class="next-step-card" onclick="startMoodTracking()">
+                        <div class="step-header">
+                            <div class="step-icon icon-mood">😊</div>
+                            <div class="step-title">Log your first mood</div>
+                        </div>
+                        <div class="step-description">Start your wellness journey by recording how you're feeling right
+                            now</div>
+                        <div class="step-cta">Tap to begin →</div>
+                    </div>
+
+                    <div class="next-step-card" onclick="exploreAssessments()">
+                        <div class="step-header">
+                            <div class="step-icon icon-assessment">📋</div>
+                            <div class="step-title">Explore wellness tools</div>
+                        </div>
+                        <div class="step-description">Discover breathing exercises, mindfulness practices, and
+                            assessment tools</div>
+                        <div class="step-cta">Explore features →</div>
+                    </div>
+
+                    <div class="next-step-card" onclick="viewProgress()">
+                        <div class="step-header">
+                            <div class="step-icon icon-insights">📊</div>
+                            <div class="step-title">Track your progress</div>
+                        </div>
+                        <div class="step-description">See how your wellness evolves with personalized insights and
+                            trends</div>
+                        <div class="step-cta">View insights →</div>
+                    </div>
+                </div>
+
+                <div class="bottom-section">
+                    <div class="encouragement-message">
+                        <div class="encouragement-text">
+                            Remember: This journey is yours. Take it one day at a time, and celebrate every small step
+                            forward. You're not alone. 💚
+                        </div>
+                    </div>
+
+                    <button class="start-journey-button" onclick="enterDashboard()">
+                        🚀 Start My Wellness Journey
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Custom message box function to replace alert()
+        function showMessage(title, message) {
+            // Find or create a message box container
+            let msgBox = document.getElementById('custom-message-box');
+            if (!msgBox) {
+                msgBox = document.createElement('div');
+                msgBox.id = 'custom-message-box';
+                msgBox.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
+                    align-items: center; z-index: 1000; backdrop-filter: blur(5px);
+                `;
+                document.body.appendChild(msgBox);
+            }
+
+            // Content Card
+            const card = document.createElement('div');
+            card.style.cssText = `
+                background: white; padding: 25px; border-radius: 20px;
+                max-width: 80%; width: 300px; text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeInUp 0.3s;
+                font-family: inherit;
+            `;
+
+            // Title
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = title;
+            titleEl.style.cssText = 'font-size: 20px; margin-bottom: 10px; color: #6366f1;';
+
+            // Message
+            const messageEl = document.createElement('p');
+            messageEl.textContent = message;
+            messageEl.style.cssText = 'font-size: 15px; color: #374151; margin-bottom: 20px; line-height: 1.4;';
+
+            // Close Button
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'Got It';
+            closeBtn.style.cssText = `
+                padding: 10px 20px; background: #6366f1; color: white;
+                border: none; border-radius: 10px; cursor: pointer;
+                font-weight: 600; transition: background 0.2s;
+            `;
+            closeBtn.onmouseover = () => closeBtn.style.background = '#8b5cf6';
+            closeBtn.onmouseout = () => closeBtn.style.background = '#6366f1';
+
+            closeBtn.onclick = () => {
+                msgBox.style.display = 'none';
+                msgBox.innerHTML = '';
+            };
+
+            card.appendChild(titleEl);
+            card.appendChild(messageEl);
+            card.appendChild(closeBtn);
+            msgBox.appendChild(card);
+            msgBox.style.display = 'flex';
+        }
+
+        // Functions updated to use showMessage instead of alert()
+        function startMoodTracking() {
+            showCelebration();
+            setTimeout(() => {
+                showMessage('Mood Tracking', "🌟 Opening mood tracking...\n\nYou'll be able to log your daily mood and see patterns over time.");
+            }, 500);
+        }
+
+        function exploreAssessments() {
+            showMessage('Wellness Tools', '🧘 Exploring wellness tools...\n\nDiscover guided breathing exercises, mindfulness practices, and clinical assessments.');
+        }
+
+        function viewProgress() {
+            showMessage('Progress Dashboard', '📈 Opening progress dashboard...\n\nSee your wellness trends, insights, and achievements.');
+        }
+
+        function enterDashboard() {
+            showCelebration();
+
+            // Simulate loading
+            const button = document.querySelector('.start-journey-button');
+            button.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            button.innerHTML = '✓ Welcome to MindWell!';
+
+            setTimeout(() => {
+                showMessage('Welcome!', "🎉 Congratulations!\n\nYou've successfully completed the MindWell onboarding.\n\nYour wellness dashboard is now ready with:\n• Daily mood tracking\n• Clinical assessments\n• Personalized insights\n• Crisis support\n• Progress analytics\n\nTake care of yourself! 💚");
+            }, 1000);
+        }
+
+        function showCelebration() {
+            // Add some confetti particles
+            for (let i = 0; i < 20; i++) {
+                createConfetti();
+            }
+        }
+
+        function createConfetti() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 3 + 's';
+            particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+
+            // Random colors
+            const colors = ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            document.querySelector('.screen').appendChild(particle);
+
+            // Remove particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 5000);
+        }
+
+        // Auto-celebrate after page load
+        setTimeout(() => {
+            showCelebration();
+        }, 1500);
+
+        // Add some interactive sparkle effects
+        document.addEventListener('mousemove', (e) => {
+            // Check if mouse is over the device-frame area
+            const frame = document.querySelector('.device-frame');
+            const rect = frame.getBoundingClientRect();
+
+            if (
+                e.clientX >= rect.left &&
+                e.clientX <= rect.right &&
+                e.clientY >= rect.top &&
+                e.clientY <= rect.bottom
+            ) {
+                if (Math.random() > 0.98) {
+                    createSparkle(e.clientX, e.clientY);
+                }
+            }
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.style.position = 'fixed';
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.width = '4px';
+            sparkle.style.height = '4px';
+            sparkle.style.background = '#fbbf24';
+            sparkle.style.borderRadius = '50%';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.zIndex = '1000';
+            sparkle.style.animation = 'confetti 1s ease-out forwards';
+
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => {
+                if (sparkle.parentNode) {
+                    sparkle.parentNode.removeChild(sparkle);
+                }
+            }, 1000);
+        }
+
+        // Update wellness score animation
+        let score = 50;
+        const targetScore = 72;
+        const scoreElement = document.querySelector('.baseline-score');
+
+        const animateScore = () => {
+            if (score < targetScore) {
+                score += 1;
+                scoreElement.textContent = score;
+                setTimeout(animateScore, 50);
+            }
+        };
+
+        setTimeout(animateScore, 2000);
+    </script>
+</body>
+
+</html>
