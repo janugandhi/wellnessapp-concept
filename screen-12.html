@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Crisis Support</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        /* Crisis Support specific styles */
+        .crisis-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .crisis-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 12px 40px rgba(239, 68, 68, 0.4),
+                0 4px 12px rgba(239, 68, 68, 0.3);
+            animation: pulseCrisis 2s ease-in-out infinite;
+        }
+
+        .crisis-icon-inner {
+            font-size: 32px;
+            color: white;
+        }
+
+        @keyframes pulseCrisis {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 12px 40px rgba(239, 68, 68, 0.4), 0 4px 12px rgba(239, 68, 68, 0.3);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 16px 50px rgba(239, 68, 68, 0.5), 0 6px 16px rgba(239, 68, 68, 0.4);
+            }
+        }
+
+        .crisis-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .crisis-subtitle {
+            font-size: 17px;
+            color: #64748b;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .crisis-message {
+            background: linear-gradient(135deg, rgba(252, 165, 165, 0.15), rgba(254, 202, 202, 0.1));
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .crisis-message-text {
+            font-size: 15px;
+            color: #dc2626;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .support-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .support-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .support-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .support-card:hover::before {
+            opacity: 1;
+        }
+
+        .support-card.emergency {
+            border-left: 4px solid #dc2626;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(220, 38, 38, 0.05));
+        }
+
+        .support-card.hotline {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .support-card.counselor {
+            border-left: 4px solid #6366f1;
+        }
+
+        .support-card.resources {
+            border-left: 4px solid #10b981;
+        }
+
+        .support-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .support-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .icon-emergency {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .icon-hotline {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .icon-counselor {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+        }
+
+        .icon-resources {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .support-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .support-badge {
+            background: rgba(239, 68, 68, 0.15);
+            color: #dc2626;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .support-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .support-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-button {
+            flex: 1;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .action-button.secondary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+
+        .action-button.secondary:hover {
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .phone-number {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .additional-resources {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 28px;
+        }
+
+        .resources-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .resource-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: rgba(248, 250, 252, 0.8);
+            border-radius: 10px;
+            border: 1px solid rgba(226, 232, 240, 0.6);
+        }
+
+        .resource-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .resource-contact {
+            font-size: 14px;
+            color: #6366f1;
+            font-weight: 600;
+        }
+
+        .safety-reminder {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.08));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .safety-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .safety-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #047857;
+            margin-bottom: 8px;
+        }
+
+        .safety-text {
+            font-size: 14px;
+            color: #059669;
+            line-height: 1.5;
+        }
+
+        .back-button {
+            width: 100%;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.7);
+            color: #6b7280;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .back-button:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.9);
+            color: #4b5563;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <!-- Liquid Glass Background Elements -->
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="content">
+                <div class="crisis-header">
+                    <div class="crisis-icon">
+                        <div class="crisis-icon-inner">🆘</div>
+                    </div>
+                    <h1 class="crisis-title">You're Not Alone</h1>
+                    <p class="crisis-subtitle">Get immediate help when you need it most. Support is available 24/7.</p>
+                </div>
+
+                <div class="crisis-message">
+                    <div class="crisis-message-text">
+                        If you're having thoughts of self-harm or are in immediate danger, please reach out for help
+                        right now.
+                    </div>
+                </div>
+
+                <div class="support-options">
+                    <div class="support-card emergency" onclick="callEmergency()">
+                        <div class="support-header">
+                            <div class="support-icon icon-emergency">🚨</div>
+                            <div style="flex: 1;">
+                                <div class="support-title">Emergency Services</div>
+                                <span class="support-badge">Immediate</span>
+                            </div>
+                        </div>
+                        <div class="support-description">
+                            For life-threatening emergencies requiring immediate medical or police assistance.
+                        </div>
+                        <div class="phone-number">
+                            📞 Call 112
+                        </div>
+                        <div class="support-action" style="margin-top: 12px;">
+                            <button class="action-button">Call Emergency Now</button>
+                        </div>
+                    </div>
+
+                    <div class="support-card hotline" onclick="callCrisisHotline()">
+                        <div class="support-header">
+                            <div class="support-icon icon-hotline">📞</div>
+                            <div style="flex: 1;">
+                                <div class="support-title">Crisis Helpline</div>
+                            </div>
+                        </div>
+                        <div class="support-description">
+                            Speak with trained crisis counselors who understand what you're going through. Available
+                            24/7.
+                        </div>
+                        <div class="phone-number">
+                            📞 +91-9152987821
+                        </div>
+                        <div class="support-action" style="margin-top: 12px;">
+                            <button class="action-button">Call Helpline</button>
+                        </div>
+                    </div>
+
+                    <div class="support-card counselor" onclick="chatWithCounselor()">
+                        <div class="support-header">
+                            <div class="support-icon icon-counselor">💬</div>
+                            <div style="flex: 1;">
+                                <div class="support-title">Talk to Counselor</div>
+                            </div>
+                        </div>
+                        <div class="support-description">
+                            Connect with a licensed mental health professional through secure text chat or video call.
+                        </div>
+                        <div class="support-action">
+                            <button class="action-button secondary">Start Chat</button>
+                        </div>
+                    </div>
+
+                    <div class="support-card resources" onclick="viewSafetyPlan()">
+                        <div class="support-header">
+                            <div class="support-icon icon-resources">📋</div>
+                            <div style="flex: 1;">
+                                <div class="support-title">My Safety Plan</div>
+                            </div>
+                        </div>
+                        <div class="support-description">
+                            Access your personalized safety plan with coping strategies and emergency contacts.
+                        </div>
+                        <div class="support-action">
+                            <button class="action-button secondary">View Safety Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="additional-resources">
+                    <div class="resources-title">Additional Support Resources</div>
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <span class="resource-name">Mental Health Helpline</span>
+                            <span class="resource-contact">+91-7836022195</span>
+                        </div>
+                        <div class="resource-item">
+                            <span class="resource-name">Vandrevala Foundation</span>
+                            <span class="resource-contact">1860-266-2345</span>
+                        </div>
+                        <div class="resource-item">
+                            <span class="resource-name">iCall (Tata Institute)</span>
+                            <span class="resource-contact">+91-9152987821</span>
+                        </div>
+                        <div class="resource-item">
+                            <span class="resource-name">AASRA</span>
+                            <span class="resource-contact">+91-9820466726</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="safety-reminder">
+                    <div class="safety-icon">💚</div>
+                    <div class="safety-title">You Matter</div>
+                    <div class="safety-text">
+                        Your life has value. This feeling is temporary, and support is available. Reaching out is a sign
+                        of strength, not weakness.
+                    </div>
+                </div>
+
+                <div class="bottom-section">
+                    <button class="back-button" onclick="goBack()">
+                        Return to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function callEmergency() {
+            if (confirm('This will call emergency services (112).\n\nAre you sure you want to proceed?')) {
+                window.location.href = 'tel:112';
+                logCrisisAction('emergency_call', '112');
+            }
+        }
+
+        function callCrisisHotline() {
+            if (confirm('This will call the crisis helpline.\n\nA trained counselor will be available to talk.')) {
+                window.location.href = 'tel:+919152987821';
+                logCrisisAction('crisis_hotline', '+91-9152987821');
+            }
+        }
+
+        function chatWithCounselor() {
+            alert('Connecting you with a counselor...\n\nYou will be connected with a licensed mental health professional via secure chat.');
+            logCrisisAction('counselor_chat', 'initiated');
+            // In real app: navigate to chat interface
+        }
+
+        function viewSafetyPlan() {
+            alert('Opening your Safety Plan...\n\nYour personalized safety plan includes:\n• Warning signs\n• Coping strategies\n• Emergency contacts\n• Reasons for living\n• Professional support information');
+            logCrisisAction('safety_plan_viewed', 'accessed');
+            // In real app: navigate to safety plan
+        }
+
+        function goBack() {
+            if (confirm('Are you sure you want to leave crisis support?\n\nYou can access this screen anytime from the dashboard.')) {
+                window.location.href = 'screen-09.html';
+            }
+        }
+
+        function logCrisisAction(actionType, details) {
+            const crisisLog = {
+                action: actionType,
+                details: details,
+                timestamp: new Date().toISOString(),
+                userLocation: 'Ludhiana, Punjab, IN'
+            };
+
+            console.log('Crisis action logged:', crisisLog);
+
+            // In real app: Send to backend for monitoring and follow-up
+            // Also notify emergency contacts if configured
+        }
+
+        // Log crisis page access
+        window.addEventListener('load', function () {
+            logCrisisAction('crisis_page_accessed', 'User viewed crisis support screen');
+        });
+
+        // Prevent accidental navigation away
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+    </script>
+</body>
+
+</html>

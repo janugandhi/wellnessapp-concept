@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Account Type</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f2ff 50%, #f0f9ff 100%);
+            border-radius: 42px;
+            overflow: auto;
+            position: relative;
+        }
+
+        .glass-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-orb-1 {
+            width: 180px;
+            height: 180px;
+            top: -40px;
+            right: -50px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            animation: float 10s ease-in-out infinite;
+        }
+
+        .glass-orb-2 {
+            width: 130px;
+            height: 130px;
+            bottom: 140px;
+            left: -35px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(59, 130, 246, 0.1));
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        .glass-orb-3 {
+            width: 90px;
+            height: 90px;
+            top: 280px;
+            left: 40px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(168, 85, 247, 0.1));
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(90deg);
+            }
+        }
+
+        .content {
+            padding: 50px 28px 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            padding-bottom: 50px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(226, 232, 240, 0.6);
+            border-radius: 2px;
+            margin-bottom: 32px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+
+        .header {
+            margin-bottom: 28px;
+            flex-shrink: 0;
+        }
+
+        .step-indicator {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .screen-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .account-types-container {
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .account-type-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .account-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .account-type-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .account-type-card:hover::before {
+            opacity: 1;
+        }
+
+        .account-type-card.selected {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.05);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+        }
+
+        .account-type-card.individual {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .account-type-card.corporate {
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .account-type-card.healthcare {
+            border-left: 4px solid #10b981;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .account-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .icon-individual {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+
+        .icon-corporate {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .icon-healthcare {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .account-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .account-type-card.selected .check-icon {
+            background: #6366f1;
+            border-color: #6366f1;
+            color: white;
+        }
+
+        .account-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .features-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .feature-icon {
+            color: #10b981;
+            font-size: 14px;
+        }
+
+        .corporate-input-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(226, 232, 240, 0.5);
+            display: none;
+        }
+
+        .account-type-card.selected .corporate-input-section {
+            display: block;
+            animation: fadeInDown 0.3s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 15px;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 6px;
+        }
+
+        .coming-soon-badge {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bottom-section {
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .continue-button {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 4px 20px rgba(99, 102, 241, 0.3),
+                0 1px 3px rgba(99, 102, 241, 0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .continue-button.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .continue-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .continue-button.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 32px rgba(99, 102, 241, 0.4),
+                0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .continue-button.enabled:hover::before {
+            opacity: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content>* {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .progress-bar {
+            animation-delay: 0.1s;
+        }
+
+        .header {
+            animation-delay: 0.2s;
+        }
+
+        .account-types-container {
+            animation-delay: 0.3s;
+        }
+
+        .bottom-section {
+            animation-delay: 0.5s;
+        }
+
+        .account-type-card:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .account-type-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .account-type-card:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="content">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+
+                <div class="header">
+                    <div class="step-indicator">Step 3 of 6</div>
+                    <h1 class="screen-title">Choose your account type</h1>
+                    <p class="screen-subtitle">Select how you'll be using MindWell to personalize your experience</p>
+                </div>
+
+                <div class="account-types-container">
+                    <div class="account-type-card individual" onclick="selectAccountType(this, 'individual')">
+                        <div class="card-header">
+                            <div class="card-header-left">
+                                <div class="account-icon icon-individual">👤</div>
+                                <div class="account-title">Individual User</div>
+                            </div>
+                            <div class="check-icon">✓</div>
+                        </div>
+                        <div class="account-description">
+                            Personal mental wellness tracking and self-care tools for your personal growth journey
+                        </div>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>Complete access to all wellness features</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>Personal progress tracking and insights</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>24/7 crisis support and resources</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-type-card corporate" onclick="selectAccountType(this, 'corporate')">
+                        <div class="card-header">
+                            <div class="card-header-left">
+                                <div class="account-icon icon-corporate">🏢</div>
+                                <div class="account-title">Corporate Employee</div>
+                            </div>
+                            <div class="check-icon">✓</div>
+                        </div>
+                        <div class="account-description">
+                            Provided by your employer as part of workplace wellness program
+                        </div>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>All individual features included</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>Anonymous team wellness insights</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>Group challenges and activities</span>
+                            </div>
+                        </div>
+                        <div class="corporate-input-section">
+                            <label class="input-label">Company Access Code</label>
+                            <input type="text" class="input-field" id="companyCode"
+                                placeholder="Enter your company code" onclick="event.stopPropagation()">
+                            <div class="input-hint">This code is provided by your HR department</div>
+                        </div>
+                    </div>
+
+                    <div class="account-type-card healthcare" onclick="selectAccountType(this, 'healthcare')">
+                        <div class="card-header">
+                            <div class="card-header-left">
+                                <div class="account-icon icon-healthcare">🏥</div>
+                                <div class="account-title">Healthcare Provider</div>
+                            </div>
+                            <div class="coming-soon-badge">Coming Soon</div>
+                        </div>
+                        <div class="account-description">
+                            For therapists, counselors, and mental health professionals to monitor patient progress
+                        </div>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>Patient monitoring dashboard</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>Clinical assessment tools</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">✓</span>
+                                <span>HIPAA-compliant data management</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-section">
+                    <button class="continue-button" id="continueBtn" onclick="continueToNext()">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedType = null;
+        let companyCode = '';
+
+        function selectAccountType(element, type) {
+            // Healthcare is coming soon, so prevent selection
+            if (type === 'healthcare') {
+                alert('Healthcare Provider accounts are coming soon! \n\nPlease select Individual or Corporate Employee for now.');
+                return;
+            }
+
+            // Remove selected class from all cards
+            document.querySelectorAll('.account-type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Add selected class to clicked card
+            element.classList.add('selected');
+            selectedType = type;
+
+            // Enable continue button
+            updateContinueButton();
+        }
+
+        function updateContinueButton() {
+            const continueBtn = document.getElementById('continueBtn');
+
+            if (selectedType === 'corporate') {
+                const code = document.getElementById('companyCode')?.value || '';
+                if (code.length >= 4) {
+                    continueBtn.classList.add('enabled');
+                } else {
+                    continueBtn.classList.remove('enabled');
+                }
+            } else if (selectedType) {
+                continueBtn.classList.add('enabled');
+            } else {
+                continueBtn.classList.remove('enabled');
+            }
+        }
+
+        // Listen for company code input
+        document.addEventListener('input', function (e) {
+            if (e.target.id === 'companyCode') {
+                updateContinueButton();
+            }
+        });
+
+        function continueToNext() {
+
+            window.location.href = 'screen-04.html';
+
+            // if (!selectedType || (selectedType === 'corporate' && !document.getElementById('companyCode')?.value)) {
+            //     alert('Please select an account type and complete any required fields.');
+            //     return;
+            // }
+
+            // const accountData = {
+            //     accountType: selectedType,
+            //     companyCode: selectedType === 'corporate' ? document.getElementById('companyCode')?.value : null,
+            //     selectedAt: new Date().toISOString()
+            // };
+
+            // console.log('Account type selection:', accountData);
+
+            // if (selectedType === 'corporate') {
+            //     alert('✅ Corporate account selected!\n\nCompany code verified. Your organization\'s wellness program is now active.');
+            // } else {
+            //     alert('✅ Individual account selected!\n\nYou\'ll have full access to all personal wellness features.');
+            // }
+
+            // In real app: validate company code and navigate to screen 4
+        }
+
+        // Auto-select individual account after 2 seconds for demo
+        setTimeout(() => {
+            const individualCard = document.querySelector('.account-type-card.individual');
+            selectAccountType(individualCard, 'individual');
+        }, 2000);
+    </script>
+</body>
+
+</html>

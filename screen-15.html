@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Goals</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        /* Goals tab specific styles */
+        .main-content {
+            padding: 20px;
+            height: calc(100% - 44px - 80px);
+            overflow-y: auto;
+        }
+
+        .goals-header {
+            margin-bottom: 24px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .add-goal-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .add-goal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .goals-summary {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.08));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #6366f1;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .goals-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 6px;
+            border-radius: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #6366f1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .goals-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .goal-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .goal-card.mood {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .goal-card.sleep {
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .goal-card.stress {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .goal-card.completed {
+            opacity: 0.7;
+            background: rgba(240, 253, 244, 0.8);
+            border-left-color: #10b981;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .goal-info {
+            flex: 1;
+        }
+
+        .goal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .goal-category {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .goal-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .icon-mood {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+        }
+
+        .icon-sleep {
+            background: linear-gradient(135deg, #e9d5ff, #ddd6fe);
+        }
+
+        .icon-stress {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        }
+
+        .icon-completed {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        }
+
+        .goal-progress {
+            margin-bottom: 12px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .progress-percentage {
+            font-size: 14px;
+            color: #6366f1;
+            font-weight: 700;
+        }
+
+        .progress-bar-container {
+            height: 8px;
+            background: rgba(226, 232, 240, 0.6);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        .goal-card.mood .progress-bar-fill {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .goal-card.sleep .progress-bar-fill {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        }
+
+        .goal-card.stress .progress-bar-fill {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+        }
+
+        .goal-card.completed .progress-bar-fill {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .goal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .goal-deadline {
+            font-size: 13px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .check-in-btn {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .check-in-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .completed-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .empty-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .empty-action-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .empty-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+        }
+
+        .suggestions-section {
+            margin-top: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+
+        .suggestion-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .suggestion-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(4px);
+        }
+
+        .suggestion-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .suggestion-content {
+            flex: 1;
+        }
+
+        .suggestion-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 2px;
+        }
+
+        .suggestion-description {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .add-icon {
+            color: #6366f1;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <!-- Liquid Glass Background Elements -->
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>MindWell</span>
+                <span>🔋 85%</span>
+            </div>
+
+            <div class="main-content">
+                <!-- Goals Header -->
+                <div class="goals-header">
+                    <div class="header-top">
+                        <h1 class="page-title">Your Goals</h1>
+                        <button class="add-goal-btn" onclick="addNewGoal()">+</button>
+                    </div>
+                    <p class="page-subtitle">Track your wellness journey with personalized goals</p>
+                </div>
+
+                <!-- Goals Summary -->
+                <div class="goals-summary">
+                    <div class="summary-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">3</div>
+                            <div class="stat-label">Active Goals</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">1</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">67%</div>
+                            <div class="stat-label">Avg Progress</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goals Tabs -->
+                <div class="goals-tabs">
+                    <button class="tab-btn active" onclick="switchTab('active')">Active</button>
+                    <button class="tab-btn" onclick="switchTab('completed')">Completed</button>
+                    <button class="tab-btn" onclick="switchTab('all')">All Goals</button>
+                </div>
+
+                <!-- Active Goals Container -->
+                <div class="goals-container" id="activeGoals">
+                    <div class="goal-card mood" onclick="viewGoalDetails('mood')">
+                        <div class="goal-header">
+                            <div class="goal-info">
+                                <div class="goal-title">Improve Daily Mood</div>
+                                <div class="goal-category">Mood Tracking</div>
+                            </div>
+                            <div class="goal-icon icon-mood">😊</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-header">
+                                <span class="progress-text">21 of 30 days logged</span>
+                                <span class="progress-percentage">70%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="goal-footer">
+                            <span class="goal-deadline">⏰ 9 days left</span>
+                            <button class="check-in-btn" onclick="checkInGoal(event, 'mood')">Check In</button>
+                        </div>
+                    </div>
+
+                    <div class="goal-card sleep" onclick="viewGoalDetails('sleep')">
+                        <div class="goal-header">
+                            <div class="goal-info">
+                                <div class="goal-title">Better Sleep Routine</div>
+                                <div class="goal-category">Sleep Quality</div>
+                            </div>
+                            <div class="goal-icon icon-sleep">🌙</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-header">
+                                <span class="progress-text">14 of 21 nights (7+ hrs)</span>
+                                <span class="progress-percentage">67%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 67%;"></div>
+                            </div>
+                        </div>
+                        <div class="goal-footer">
+                            <span class="goal-deadline">⏰ 7 days left</span>
+                            <button class="check-in-btn" onclick="checkInGoal(event, 'sleep')">Log Sleep</button>
+                        </div>
+                    </div>
+
+                    <div class="goal-card stress" onclick="viewGoalDetails('stress')">
+                        <div class="goal-header">
+                            <div class="goal-info">
+                                <div class="goal-title">Reduce Work Stress</div>
+                                <div class="goal-category">Stress Management</div>
+                            </div>
+                            <div class="goal-icon icon-stress">🧘</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-header">
+                                <span class="progress-text">10 of 15 meditation sessions</span>
+                                <span class="progress-percentage">67%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 67%;"></div>
+                            </div>
+                        </div>
+                        <div class="goal-footer">
+                            <span class="goal-deadline">⏰ 14 days left</span>
+                            <button class="check-in-btn" onclick="checkInGoal(event, 'stress')">Start Session</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Goals Container (hidden by default) -->
+                <div class="goals-container" id="completedGoals" style="display: none;">
+                    <div class="goal-card completed" onclick="viewGoalDetails('assessment')">
+                        <div class="goal-header">
+                            <div class="goal-info">
+                                <div class="goal-title">Complete Weekly Assessments</div>
+                                <div class="goal-category">Mental Health Check</div>
+                            </div>
+                            <div class="goal-icon icon-completed">✓</div>
+                        </div>
+                        <div class="goal-progress">
+                            <div class="progress-header">
+                                <span class="progress-text">4 of 4 assessments</span>
+                                <span class="progress-percentage">100%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="goal-footer">
+                            <span class="goal-deadline">✓ Completed 2 days ago</span>
+                            <div class="completed-badge">
+                                ✓ Completed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Suggested Goals -->
+                <div class="suggestions-section">
+                    <div class="section-title">Suggested Goals</div>
+                    <div class="suggestion-cards">
+                        <div class="suggestion-card" onclick="addSuggestedGoal('exercise')">
+                            <div class="suggestion-icon icon-mood">💪</div>
+                            <div class="suggestion-content">
+                                <div class="suggestion-title">Weekly Exercise Goal</div>
+                                <div class="suggestion-description">Exercise 3 times per week for better mood</div>
+                            </div>
+                            <span class="add-icon">+</span>
+                        </div>
+
+                        <div class="suggestion-card" onclick="addSuggestedGoal('social')">
+                            <div class="suggestion-icon icon-stress">👥</div>
+                            <div class="suggestion-content">
+                                <div class="suggestion-title">Social Connection</div>
+                                <div class="suggestion-description">Connect with friends twice weekly</div>
+                            </div>
+                            <span class="add-icon">+</span>
+                        </div>
+
+                        <div class="suggestion-card" onclick="addSuggestedGoal('gratitude')">
+                            <div class="suggestion-icon icon-completed">📝</div>
+                            <div class="suggestion-content">
+                                <div class="suggestion-title">Daily Gratitude Practice</div>
+                                <div class="suggestion-description">Write 3 things you're grateful for daily</div>
+                            </div>
+                            <span class="add-icon">+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="selectTab('home')">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item" onclick="selectTab('progress')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Progress</span>
+                </div>
+                <div class="nav-item active" onclick="selectTab('goals')">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-label">Goals</span>
+                </div>
+                <div class="nav-item" onclick="selectTab('community')">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Community</span>
+                </div>
+                <div class="nav-item" onclick="selectTab('profile')">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide goal containers
+            const activeGoals = document.getElementById('activeGoals');
+            const completedGoals = document.getElementById('completedGoals');
+
+            if (tabName === 'active') {
+                activeGoals.style.display = 'flex';
+                completedGoals.style.display = 'none';
+            } else if (tabName === 'completed') {
+                activeGoals.style.display = 'none';
+                completedGoals.style.display = 'flex';
+            } else {
+                activeGoals.style.display = 'flex';
+                completedGoals.style.display = 'flex';
+            }
+        }
+
+        function addNewGoal() {
+            alert('Create New Goal\n\nChoose a goal type:\n• Mood improvement\n• Sleep quality\n• Stress reduction\n• Exercise routine\n• Social connection\n• Custom goal');
+        }
+
+        function viewGoalDetails(goalType) {
+            const goalNames = {
+                mood: 'Daily Mood Tracking',
+                sleep: 'Better Sleep Routine',
+                stress: 'Reduce Work Stress',
+                assessment: 'Weekly Assessments'
+            };
+
+            alert(`${goalNames[goalType]}\n\nView detailed progress, milestones, and activity history.`);
+        }
+
+        function checkInGoal(event, goalType) {
+            event.stopPropagation();
+            const actions = {
+                mood: 'Log your current mood',
+                sleep: 'Record last night\'s sleep',
+                stress: 'Start meditation session'
+            };
+
+            alert(`${actions[goalType]}\n\nThis check-in will count toward your goal progress.`);
+        }
+
+        function addSuggestedGoal(goalType) {
+            const goals = {
+                exercise: 'Weekly Exercise Goal',
+                social: 'Social Connection',
+                gratitude: 'Daily Gratitude Practice'
+            };
+
+            alert(`Add "${goals[goalType]}" to your active goals?\n\nThis will help you track and achieve this wellness milestone.`);
+        }
+
+        function selectTab(tabName) {
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Add active class to selected tab
+            event.currentTarget.classList.add('active');
+
+            if (tabName == 'home') {
+                window.location.href = 'screen-09.html';
+            } else if (tabName == 'progress') {
+                window.location.href = 'screen-10.html';
+            }
+
+            // alert(`Navigating to ${tabName.charAt(0).toUpperCase() + tabName.slice(1)} tab...`);
+        }
+    </script>
+</body>
+
+</html>

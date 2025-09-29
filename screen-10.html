@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Baseline Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacMacFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 30%, #f1f5f9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .device-frame {
+            width: 390px;
+            height: 844px;
+            background: #1a1a1a;
+            border-radius: 50px;
+            padding: 8px;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 8px 25px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            /* Ensured the frame is contained */
+            overflow: hidden;
+        }
+
+        .device-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fafc 0%, #e8f2ff 50%, #f0f9ff 100%);
+            border-radius: 42px;
+            /* Crucial: Hide screen overflow, let .content manage layout */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .glass-orb {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            z-index: 1;
+        }
+
+        .glass-orb-1 {
+            width: 160px;
+            height: 160px;
+            top: -30px;
+            right: -40px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.1));
+        }
+
+        .glass-orb-2 {
+            width: 120px;
+            height: 120px;
+            bottom: 120px;
+            left: -30px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+        }
+
+        .glass-orb-3 {
+            width: 80px;
+            height: 80px;
+            top: 320px;
+            right: -10px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(139, 92, 246, 0.08));
+        }
+
+        .content {
+            /* Flex container setup */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            /* Removed bottom padding, the fixed footer will provide visual space */
+            padding: 50px 28px 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        /* --- FIXED HEADER ELEMENTS --- */
+
+        .progress-container,
+        .header,
+        .info-section {
+            /* Prevent fixed elements from shrinking */
+            flex-shrink: 0;
+        }
+
+        .progress-container {
+            margin-bottom: 32px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(226, 232, 240, 0.6);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 33%;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 2px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .header {
+            margin-bottom: 24px;
+        }
+
+        .step-indicator {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .assessment-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow:
+                0 8px 32px rgba(59, 130, 246, 0.3),
+                0 2px 8px rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 16px;
+        }
+
+        .icon-text {
+            font-size: 28px;
+            color: white;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .screen-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .info-section {
+            background: rgba(239, 246, 255, 0.6);
+            border: 1px solid rgba(147, 197, 253, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .info-icon {
+            font-size: 16px;
+        }
+
+        .info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #1e40af;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        /* --- SCROLLABLE CONTENT --- */
+
+        .question-container {
+            /* Takes up all available space */
+            flex: 1;
+            /* Enables vertical scrolling */
+            overflow-y: auto;
+            /* Removed old margin, added padding to top/bottom of scroll area */
+            padding: 0 0 20px 0;
+            margin: 0;
+            /* Ensuring inner content flows normally, not centered */
+            display: block;
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 32px 24px;
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Added extra margin between repeated content for demonstration */
+        .question-card+.question-card {
+            margin-top: 16px;
+        }
+
+        .question-number {
+            font-size: 13px;
+            color: #6366f1;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1.4;
+            margin-bottom: 32px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-button {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 18px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .option-button:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+            transform: translateX(4px);
+        }
+
+        .option-button.selected {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(29, 78, 216, 0.1));
+            color: #1e40af;
+        }
+
+        /* --- FIXED FOOTER ELEMENTS --- */
+
+        .bottom-section {
+            /* Prevent fixed element from shrinking */
+            flex-shrink: 0;
+            /* Added background to cover scrolling content */
+            background: linear-gradient(0deg, #f8fafc 0%, #f8fafc 70%, rgba(248, 250, 252, 0.9) 100%);
+            /* Match screen radius on bottom corners */
+            border-radius: 0 0 42px 42px;
+            /* Apply internal padding for the buttons */
+            padding: 20px 0 40px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .skip-button {
+            flex: 1;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.7);
+            color: #6b7280;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .skip-button:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.9);
+            color: #4b5563;
+        }
+
+        .continue-button {
+            flex: 2;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 4px 20px rgba(59, 130, 246, 0.3),
+                0 1px 3px rgba(59, 130, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .continue-button.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .continue-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .continue-button.enabled:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 8px 32px rgba(59, 130, 246, 0.4),
+                0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .continue-button.enabled:hover::before {
+            opacity: 1;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 430px) {
+            .device-frame {
+                width: 100%;
+                max-width: 390px;
+                height: 100vh;
+                max-height: 844px;
+                border-radius: 0;
+                padding: 0;
+            }
+
+            .screen {
+                border-radius: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .device-frame {
+                width: 430px;
+                height: 932px;
+            }
+
+            .content {
+                padding: 60px 32px 0;
+                /* Adjusted for fixed footer */
+            }
+
+            /* .screen-title {
+                font-size: 32px;
+            } */
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content>* {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .progress-container {
+            animation-delay: 0.1s;
+        }
+
+        .header {
+            animation-delay: 0.2s;
+        }
+
+        .info-section {
+            animation-delay: 0.3s;
+        }
+
+        .question-container {
+            animation-delay: 0.4s;
+        }
+
+        .bottom-section {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(90deg);
+            }
+        }
+
+        .glass-orb-1 {
+            animation: float 9s ease-in-out infinite;
+        }
+
+        .glass-orb-2 {
+            animation: float 11s ease-in-out infinite reverse;
+        }
+
+        .glass-orb-3 {
+            animation: float 7s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="content">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar"></div>
+                    </div>
+                    <div class="progress-text">Question <span id="currentQ">1</span> of 9</div>
+                </div>
+
+                <div class="header">
+                    <div class="step-indicator">PHQ-9 Baseline Assessment</div>
+                    <div class="assessment-icon">
+                        <div class="icon-text">📋</div>
+                    </div>
+                    <h2 class="screen-title">Mental wellness check-in</h2>
+
+                    <div>Answer honestly about how you've been feeling over the last 2 weeks</div>
+
+                    <!-- <p class="screen-subtitle">Answer honestly about how you've been feeling over the last 2 weeks</p> -->
+                </div>
+
+                <div class="info-section">
+                    <div class="info-header">
+                        <span class="info-icon">💡</span>
+                        <div class="info-title">Why this assessment?</div>
+                    </div>
+                    <div class="info-text">
+                        This clinically-validated PHQ-9 assessment helps us understand your baseline mental wellness and
+                        provide personalized support.
+                    </div>
+                </div>
+
+                <!-- This container is now the scrollable area -->
+                <div class="question-container">
+                    <div class="question-card">
+                        <div class="question-number" id="questionLabel">Question 1</div>
+                        <div class="question-text" id="questionText">Little interest or pleasure in doing things</div>
+                        <div class="options-container" id="optionsContainer">
+                            <button class="option-button" onclick="selectOption(0)">Not at all</button>
+                            <button class="option-button" onclick="selectOption(1)">Several days</button>
+                            <button class="option-button" onclick="selectOption(2)">More than half the days</button>
+                            <button class="option-button" onclick="selectOption(3)">Nearly every day</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-section">
+                    <div class="action-buttons">
+                        <button class="skip-button" onclick="showSkipConfirmation()">
+                            Skip
+                        </button>
+                        <button class="continue-button" id="continueBtn" onclick="nextQuestion()">
+                            Next Question
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const phq9Questions = [
+            "Little interest or pleasure in doing things",
+            "Feeling down, depressed, or hopeless",
+            "Trouble falling or staying asleep, or sleeping too much",
+            "Feeling tired or having little energy",
+            "Poor appetite or overeating",
+            "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
+            "Trouble concentrating on things, such as reading the newspaper or watching television",
+            "Moving or speaking so slowly that other people could have noticed. Or the opposite — being so fidgety or restless that you have been moving around a lot more than usual",
+            "Thoughts that you would be better off dead, or of hurting yourself in some way"
+        ];
+
+        let currentQuestion = 0;
+        let responses = [];
+
+        /* START: Custom Message Box (Replaces alert() and confirm()) */
+        function showMessage(title, message, isConfirm = false, onConfirm = null) {
+            let msgBox = document.getElementById('custom-message-box');
+            if (!msgBox) {
+                msgBox = document.createElement('div');
+                msgBox.id = 'custom-message-box';
+                msgBox.style.cssText = `
+                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
+                    align-items: center; z-index: 1000; backdrop-filter: blur(5px);
+                    font-family: inherit;
+                `;
+                document.body.appendChild(msgBox);
+            }
+
+            const card = document.createElement('div');
+            card.style.cssText = `
+                background: white; padding: 25px; border-radius: 20px;
+                max-width: 80%; width: 300px; text-align: center;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            `;
+
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = title;
+            titleEl.style.cssText = 'font-size: 20px; margin-bottom: 10px; color: #3b82f6;';
+
+            const messageEl = document.createElement('p');
+            messageEl.textContent = message;
+            messageEl.style.cssText = 'font-size: 15px; color: #374151; margin-bottom: 20px; line-height: 1.4;';
+
+            const buttonContainer = document.createElement('div');
+            buttonContainer.style.cssText = 'display: flex; justify-content: center; gap: 10px;';
+
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = 'OK';
+            closeBtn.style.cssText = `
+                padding: 10px 20px; background: #3b82f6; color: white;
+                border: none; border-radius: 10px; cursor: pointer;
+                font-weight: 600; transition: background 0.2s;
+            `;
+
+            closeBtn.onclick = () => {
+                msgBox.style.display = 'none';
+                msgBox.innerHTML = '';
+            };
+
+            card.appendChild(titleEl);
+            card.appendChild(messageEl);
+
+            if (isConfirm) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.style.cssText = `
+                    padding: 10px 20px; background: #e5e7eb; color: #4b5563;
+                    border: none; border-radius: 10px; cursor: pointer;
+                    font-weight: 600; transition: background 0.2s;
+                `;
+                cancelBtn.onclick = closeBtn.onclick;
+
+                closeBtn.textContent = 'Yes, Skip';
+                closeBtn.onclick = () => {
+                    onConfirm();
+                    msgBox.style.display = 'none';
+                    msgBox.innerHTML = '';
+                };
+
+                buttonContainer.appendChild(cancelBtn);
+                buttonContainer.appendChild(closeBtn);
+            } else {
+                buttonContainer.appendChild(closeBtn);
+            }
+
+            card.appendChild(buttonContainer);
+            msgBox.appendChild(card);
+            msgBox.style.display = 'flex';
+        }
+
+        function showSkipConfirmation() {
+            showMessage(
+                'Skip Assessment?',
+                'You can take it later, but completing it now helps us provide personalized support from the start.',
+                true,
+                () => skipAssessment()
+            );
+        }
+        /* END: Custom Message Box */
+
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / phq9Questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentQ').textContent = currentQuestion + 1;
+        }
+
+        function updateQuestion() {
+            // NOTE: This function currently only updates the *first* question card,
+            // which is correct for a single-question quiz interface.
+            document.getElementById('questionLabel').textContent = `Question ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = phq9Questions[currentQuestion];
+
+            // Reset option selections
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Disable continue button
+            document.getElementById('continueBtn').classList.remove('enabled');
+
+            // Update button text for last question
+            if (currentQuestion === phq9Questions.length - 1) {
+                document.getElementById('continueBtn').textContent = 'Complete Assessment';
+            } else {
+                document.getElementById('continueBtn').textContent = 'Next Question';
+            }
+
+            updateProgress();
+        }
+
+        function selectOption(value) {
+            // Remove selection from all buttons
+            document.querySelectorAll('#optionsContainer .option-button').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+
+            // Add selection to clicked button
+            event.target.classList.add('selected');
+
+            // Store response
+            responses[currentQuestion] = value;
+
+            // Enable continue button
+            document.getElementById('continueBtn').classList.add('enabled');
+        }
+
+        function nextQuestion() {
+            if (!document.getElementById('continueBtn').classList.contains('enabled')) {
+                return;
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < phq9Questions.length) {
+                updateQuestion();
+            } else {
+                completeAssessment();
+            }
+        }
+
+        function completeAssessment() {
+            const totalScore = responses.reduce((sum, val) => sum + val, 0);
+
+            let severity;
+            if (totalScore <= 4) severity = 'Minimal depression';
+            else if (totalScore <= 9) severity = 'Mild depression';
+            else if (totalScore <= 14) severity = 'Moderate depression';
+            else if (totalScore <= 19) severity = 'Moderately severe depression';
+            else severity = 'Severe depression';
+
+            console.log('PHQ-9 Assessment Complete:', {
+                responses,
+                totalScore,
+                severity,
+                completedAt: new Date().toISOString()
+            });
+
+            // Replaced alert() with showMessage()
+            // showMessage(
+            //     'Assessment Complete!',
+            //     `Your score: ${totalScore}/27. Severity: ${severity}.\n\nThis baseline will help us track your progress and provide personalized support.`
+            // );
+
+            window.location.href = 'screen-09.html';
+
+            // In real app: save to backend and navigate to dashboard
+        }
+
+        function skipAssessment() {
+            // This function is now only called after confirmation from showSkipConfirmation
+            showMessage(
+                'Skipped',
+                'You can complete this assessment anytime from your dashboard.'
+            );
+            // Navigate to dashboard
+        }
+
+        // Initialize (Called when the page loads)
+        updateQuestion();
+    </script>
+</body>
+
+</html>

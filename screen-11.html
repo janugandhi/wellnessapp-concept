@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindWell - Assessments</title>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+        /* Assessment-specific styles */
+        .status-bar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            padding: 20px;
+            height: calc(100% - 44px - 80px);
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #6366f1;
+            font-size: 15px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 0;
+            margin-bottom: 12px;
+        }
+
+        .back-button:hover {
+            color: #4f46e5;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .assessment-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.6);
+            padding: 6px;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+        }
+
+        .assessments-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .assessment-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .assessment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .assessment-card:hover::before {
+            opacity: 1;
+        }
+
+        .assessment-card.depression {
+            border-left: 4px solid #3b82f6;
+        }
+
+        .assessment-card.anxiety {
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .assessment-card.stress {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .assessment-card.life-satisfaction {
+            border-left: 4px solid #10b981;
+        }
+
+        .assessment-card.completed {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
+        }
+
+        .assessment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .assessment-info {
+            flex: 1;
+        }
+
+        .assessment-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+
+        .assessment-code {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .assessment-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-due {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .badge-recommended {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .badge-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .badge-available {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+        }
+
+        .assessment-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .assessment-meta {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .meta-icon {
+            font-size: 14px;
+        }
+
+        .assessment-score {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .score-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .score-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #6366f1;
+        }
+
+        .score-trend {
+            font-size: 12px;
+            color: #10b981;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .info-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.03));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #4338ca;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #6366f1;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+            color: #6366f1;
+            line-height: 1.4;
+        }
+
+        .info-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .history-section {
+            margin-bottom: 24px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .view-all-btn {
+            color: #6366f1;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .history-item {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 2px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .history-score {
+            text-align: right;
+        }
+
+        .history-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .history-category {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-item.active .nav-icon {
+            color: #6366f1;
+        }
+
+        .nav-item.active .nav-label {
+            color: #6366f1;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            color: #6b7280;
+            transition: color 0.2s ease;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            transition: color 0.2s ease;
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .assessment-card {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .assessment-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .assessment-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .assessment-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .assessment-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="device-frame">
+        <div class="screen">
+            <!-- Liquid Glass Background Elements -->
+            <div class="glass-orb glass-orb-1"></div>
+            <div class="glass-orb glass-orb-2"></div>
+            <div class="glass-orb glass-orb-3"></div>
+
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>MindWell</span>
+                <span>85%</span>
+            </div>
+
+            <div class="main-content">
+                <div class="page-header">
+                    <button class="back-button" onclick="goBack()">
+                        ← Back
+                    </button>
+                    <h1 class="page-title">Mental Health Assessments</h1>
+                    <p class="page-subtitle">Clinically-validated tools to track your mental wellness</p>
+                </div>
+
+                <div class="assessment-tabs">
+                    <button class="tab-button active" onclick="switchTab(this, 'available')">Available</button>
+                    <button class="tab-button" onclick="switchTab(this, 'completed')">Completed</button>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">
+                        <span>ℹ️</span>
+                        About Our Assessments
+                    </div>
+                    <div class="info-text">
+                        Our assessments use clinically-validated scales trusted by healthcare professionals worldwide:
+                    </div>
+                    <ul class="info-list">
+                        <li>Evidence-based screening tools with proven accuracy</li>
+                        <li>Regular assessments help track your progress over time</li>
+                        <li>Your responses are private and encrypted</li>
+                        <li>Results can be shared with your healthcare provider</li>
+                    </ul>
+                </div>
+
+                <div class="assessments-grid" id="availableAssessments">
+                    <div class="assessment-card depression" onclick="startAssessment('phq9')">
+                        <div class="assessment-header">
+                            <div class="assessment-info">
+                                <div class="assessment-name">Depression Screening</div>
+                                <div class="assessment-code">PHQ-9</div>
+                            </div>
+                            <div class="assessment-badge badge-due">Due Now</div>
+                        </div>
+                        <div class="assessment-description">
+                            Assesses symptoms of depression over the past two weeks. Recommended weekly.
+                        </div>
+                        <div class="assessment-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">📋</span>
+                                <span>9 questions</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">⏱️</span>
+                                <span>2-3 minutes</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                <span>Last: 7 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card anxiety" onclick="startAssessment('gad7')">
+                        <div class="assessment-header">
+                            <div class="assessment-info">
+                                <div class="assessment-name">Anxiety Assessment</div>
+                                <div class="assessment-code">GAD-7</div>
+                            </div>
+                            <div class="assessment-badge badge-recommended">Recommended</div>
+                        </div>
+                        <div class="assessment-description">
+                            Evaluates anxiety symptoms and their severity. Helps identify anxiety disorders.
+                        </div>
+                        <div class="assessment-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">📋</span>
+                                <span>7 questions</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">⏱️</span>
+                                <span>1-2 minutes</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                <span>Last: 8 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card stress" onclick="startAssessment('dass21')">
+                        <div class="assessment-header">
+                            <div class="assessment-info">
+                                <div class="assessment-name">Stress & Mood Scale</div>
+                                <div class="assessment-code">DASS-21</div>
+                            </div>
+                            <div class="assessment-badge badge-available">Available</div>
+                        </div>
+                        <div class="assessment-description">
+                            Comprehensive assessment covering depression, anxiety, and stress symptoms.
+                        </div>
+                        <div class="assessment-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">📋</span>
+                                <span>21 questions</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">⏱️</span>
+                                <span>5-7 minutes</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                <span>Last: Never</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card life-satisfaction" onclick="startAssessment('swls')">
+                        <div class="assessment-header">
+                            <div class="assessment-info">
+                                <div class="assessment-name">Life Satisfaction Scale</div>
+                                <div class="assessment-code">SWLS</div>
+                            </div>
+                            <div class="assessment-badge badge-available">Available</div>
+                        </div>
+                        <div class="assessment-description">
+                            Measures overall life satisfaction and wellbeing. Monthly check-in recommended.
+                        </div>
+                        <div class="assessment-meta">
+                            <div class="meta-item">
+                                <span class="meta-icon">📋</span>
+                                <span>5 questions</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">⏱️</span>
+                                <span>1 minute</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-icon">📅</span>
+                                <span>Last: 14 days ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="assessments-grid" id="completedAssessments" style="display: none;">
+                    <div class="assessment-card completed">
+                        <div class="assessment-header">
+                            <div class="assessment-info">
+                                <div class="assessment-name">Depression Screening</div>
+                                <div class="assessment-code">PHQ-9</div>
+                            </div>
+                            <div class="assessment-badge badge-completed">Completed</div>
+                        </div>
+                        <div class="assessment-description">
+                            Completed 7 days ago with improving trend
+                        </div>
+                        <div class="assessment-score">
+                            <div class="score-label">Your Score</div>
+                            <div>
+                                <span class="score-value">8</span>
+                                <span class="score-trend">↓ -3 from previous</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="assessment-card completed">
+                        <div class="assessment-header">
+                            <div class="assessment-info">
+                                <div class="assessment-name">Anxiety Assessment</div>
+                                <div class="assessment-code">GAD-7</div>
+                            </div>
+                            <div class="assessment-badge badge-completed">Completed</div>
+                        </div>
+                        <div class="assessment-description">
+                            Completed 8 days ago with stable pattern
+                        </div>
+                        <div class="assessment-score">
+                            <div class="score-label">Your Score</div>
+                            <div>
+                                <span class="score-value">6</span>
+                                <span class="score-trend">→ No change</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <div class="section-header">
+                        <div class="section-title">Recent History</div>
+                        <span class="view-all-btn" onclick="viewAllHistory()">View All</span>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-info">
+                            <div class="history-name">PHQ-9 Depression Screening</div>
+                            <div class="history-date">September 21, 2025</div>
+                        </div>
+                        <div class="history-score">
+                            <div class="history-value">8</div>
+                            <div class="history-category">Mild</div>
+                        </div>
+                    </div>
+                    <div class="history-item">
+                        <div class="history-info">
+                            <div class="history-name">GAD-7 Anxiety Assessment</div>
+                            <div class="history-date">September 20, 2025</div>
+                        </div>
+                        <div class="history-score">
+                            <div class="history-value">6</div>
+                            <div class="history-category">Mild</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item" onclick="navigate('home')">
+                    <span class="nav-icon">🏠</span>
+                    <span class="nav-label">Home</span>
+                </div>
+                <div class="nav-item active" onclick="navigate('progress')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Progress</span>
+                </div>
+                <div class="nav-item" onclick="navigate('goals')">
+                    <span class="nav-icon">🎯</span>
+                    <span class="nav-label">Goals</span>
+                </div>
+                <div class="nav-item" onclick="navigate('community')">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-label">Community</span>
+                </div>
+                <div class="nav-item" onclick="navigate('settings')">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Settings</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            alert('Navigating back to dashboard...');
+            // In real app: window.history.back() or navigate to dashboard
+        }
+
+        function switchTab(button, tabType) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add active class to clicked tab
+            button.classList.add('active');
+
+            // Show/hide assessment lists
+            if (tabType === 'available') {
+                document.getElementById('availableAssessments').style.display = 'flex';
+                document.getElementById('completedAssessments').style.display = 'none';
+            } else {
+                document.getElementById('availableAssessments').style.display = 'none';
+                document.getElementById('completedAssessments').style.display = 'flex';
+            }
+        }
+
+        function startAssessment(type) {
+            const assessmentNames = {
+                'phq9': 'PHQ-9 Depression Screening',
+                'gad7': 'GAD-7 Anxiety Assessment',
+                'dass21': 'DASS-21 Stress & Mood Scale',
+                'swls': 'Satisfaction with Life Scale'
+            };
+
+            alert(`Starting ${assessmentNames[type]}...\n\nThis assessment will help us understand your mental health and track your progress over time.`);
+        }
+
+        function viewAllHistory() {
+            alert('Viewing complete assessment history...\n\nYou can see all your past assessments, scores, and trends over time.');
+        }
+
+        function navigate(section) {
+            // alert(`Navigating to ${section}...`);
+
+            if (section == 'home') {
+                window.location.href = 'screen-09.html';
+            } else if (section == 'goals') {
+                window.location.href = 'screen-15.html';
+            }
+
+        }
+    </script>
+</body>
+
+</html>

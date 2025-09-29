@@ -343,7 +343,8 @@
         }
 
         function startAssessment() {
-            alert('📋 Starting PHQ-9 Assessment...\n\nThis will help us understand how you\'ve been feeling over the past two weeks.');
+            // alert('📋 Starting PHQ-9 Assessment...\n\nThis will help us understand how you\'ve been feeling over the past two weeks.');
+            window.location.href = 'screen-10.html';
         }
 
         function getSupportNow() {
@@ -368,9 +369,14 @@
 
         function selectTab(tabName) {
             // Remove active class from all nav items
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
+            // document.querySelectorAll('.nav-item').forEach(item => {
+            //     item.classList.remove('active');
+            // });
+            if (tabName == 'progress') {
+                window.location.href = 'screen-11.html';
+            } else if (tabName == 'goals') {
+                window.location.href = 'screen-15.html';
+            }
         }
     </script>
 </body>
